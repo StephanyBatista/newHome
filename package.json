@@ -1,0 +1,30 @@
+{
+  "name": "new-home",
+  "version": "1.0.0",
+  "description": "new home to company",
+  "main": "index.js",
+  "scripts": {
+    "test": "tsc. mocha test --recursive"
+  },
+  "author": "salmeidabatista@gmail.com",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "0.0.2",
+    "chai": "^3.5.0",
+    "chain": "^0.1.3",
+    "mocha": "^3.2.0",
+    "mockgoose": "^6.0.8",
+    "proxyquire": "^1.7.10",
+    "sinon": "^1.17.6",
+    "sinon-as-promised": "^4.0.2",
+    "sinon-mongoose": "^1.3.0",
+    "tsc": "^1.20150623.0",
+    "tsd": "^0.6.5",
+    "typescript": "^2.1.4"
+  },
+  "dependencies": {
+    "mongoose": "^4.7.2",
+    "tslint": "^4.0.2",
+    "typings": "^2.0.0"
+  }
+}
