@@ -14,16 +14,16 @@ class Startup {
         this._app = app;
         this._app.engine('html', consolidate_1.swig);
         this._app.set('view engine', 'html');
-        this._app.set('views', __dirname + '\views');
+        this._app.set('views', __dirname + '/views');
         this._app.use(logger('dev'));
         this._app.use(body_parser_1.json());
         this._app.use(body_parser_1.urlencoded({ extended: true }));
         this._app.use(cookieParser());
         this._app.use(express.static(path_1.join(__dirname, 'public')));
         app.use(favicon(__dirname + '/public/images/favicon.ico'));
-        this.ConfigureNoFound();
-        this.ConfigureErrorMessageInDevelopment();
-        this.ConfigureError500();
+        //this.ConfigureNoFound();
+        //this.ConfigureErrorMessageInDevelopment();
+        //this.ConfigureError500();
     }
     ConfigureNoFound() {
         this._app.use((req, res, next) => {

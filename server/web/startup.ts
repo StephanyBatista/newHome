@@ -20,7 +20,7 @@ export class Startup{
         this._app = app;
         this._app.engine('html', swig);
         this._app.set('view engine', 'html');
-        this._app.set('views', __dirname + '\views');   
+        this._app.set('views', __dirname + '/views');   
         this._app.use(logger('dev'));
         this._app.use(json());
         this._app.use(urlencoded({ extended: true }));
@@ -28,9 +28,9 @@ export class Startup{
         this._app.use(express.static(join(__dirname, 'public')));
         app.use(favicon(__dirname + '/public/images/favicon.ico'));
         
-        this.ConfigureNoFound();
-        this.ConfigureErrorMessageInDevelopment();
-        this.ConfigureError500();
+        //this.ConfigureNoFound();
+        //this.ConfigureErrorMessageInDevelopment();
+        //this.ConfigureError500();
     }
 
     private ConfigureNoFound(){
