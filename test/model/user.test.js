@@ -27,3 +27,4 @@ describe('domain user', () => {
         chai_1.assert.equal(user.password, password);
     });
 });
+//# sourceMappingURL=user.test.js.map

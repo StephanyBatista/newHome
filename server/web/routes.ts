@@ -1,8 +1,8 @@
 import {Application, Router} from 'express';
+import {UserController} from './controllers/user.controller';
 
 export class Routes{
 
-    readonly app: Application;
     readonly router: Router;
     
     constructor(router: Router){
@@ -13,11 +13,12 @@ export class Routes{
 
     private Configure(){
         
-        this.router.post('/api/v1/user', (req, res) => {});
+        var user = new UserController();
+        this.router.post('/api/v1/user', user.post);
     }
 
     public Apply(app: Application){
         
-        this.app.use('/', this.router);
+        app.use('/', this.router);
     }
 }

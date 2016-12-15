@@ -17,12 +17,14 @@ describe('Routes', () => {
     });
     it('shoud apply the routes in application', () => {
         var app = {
-            use: (param1, param2) => { }
+            use: (path, router) => {
+                chai_1.assert.equal('/', path);
+                chai_1.assert.equal(router, routes.router);
+            }
         };
         var useSpy = sinon.spy(app, 'use');
         var routes = new Routes_1.Routes(router);
         routes.Apply(app);
-        console.log(useSpy.getCall(1).args);
-        sinon.assert.calledWith(useSpy, ['/', routes.router]);
     });
 });
+//# sourceMappingURL=routes.test.js.map

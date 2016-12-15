@@ -1,8 +1,9 @@
 import {assert} from 'chai';
-import {Mongoose} from 'mongoose';
+import {Mongoose, Model} from 'mongoose';
 import {User} from '../../server/model/user';
 import {IUser} from '../../server/dao/iuser';
 import {UserModel} from '../../server/dao/user.model';
+import {UserDao} from '../../server/dao/user.dao'
 
 describe('User dao', () => {
 
@@ -13,8 +14,6 @@ describe('User dao', () => {
     
     var user = new User("user", "user@gmail.com", new Date());
     user.updatePassword("123");
-    
-    var UserDao = require('../../server/dao/user.dao');
     
     it('should create a new document when save a user', () => {
         
@@ -36,7 +35,7 @@ describe('User dao', () => {
             }
         };
 
-        var dao = new UserDao(modelStub);
+        var dao = new UserDao(<Model<IUser>>modelStub);
 
         dao.save(user);
     });

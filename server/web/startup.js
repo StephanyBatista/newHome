@@ -17,12 +17,9 @@ class Startup {
         this._app.set('views', __dirname + '\views');
         this._app.use(logger('dev'));
         this._app.use(body_parser_1.json());
-        this._app.use(body_parser_1.urlencoded({ extended: false }));
+        this._app.use(body_parser_1.urlencoded({ extended: true }));
         this._app.use(cookieParser());
         this._app.use(express.static(path_1.join(__dirname, 'public')));
-        this._app.get('/', function (req, res) {
-            res.send('hello world');
-        });
         app.use(favicon(__dirname + '/public/images/favicon.ico'));
         this.ConfigureNoFound();
         this.ConfigureErrorMessageInDevelopment();
@@ -63,3 +60,4 @@ class Startup {
     }
 }
 exports.Startup = Startup;
+//# sourceMappingURL=startup.js.map

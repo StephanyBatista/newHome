@@ -28,14 +28,14 @@ describe('Routes', () => {
     it('shoud apply the routes in application', () =>{
 
         var app = <Application>{
-            use: (param1, param2) => {}
+            use: (path: string, router: Router) => {
+                assert.equal('/', path);
+                assert.equal(router, routes.router);
+            }
         };
         var useSpy = sinon.spy(app, 'use');
         var routes = new Routes(router);
 
         routes.Apply(app);
-
-        console.log(useSpy.getCall(1).args);
-        sinon.assert.calledWith(useSpy, ['/', routes.router]);
     });
 });

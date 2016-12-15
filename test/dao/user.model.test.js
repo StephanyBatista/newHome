@@ -13,3 +13,4 @@ describe('User model', () => {
         chai_1.assert.isDefined(userModel.model);
     });
 });
+//# sourceMappingURL=user.model.test.js.map
