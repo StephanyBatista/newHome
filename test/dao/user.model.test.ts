@@ -1,6 +1,6 @@
 import {assert} from 'chai';
 import {Mongoose} from 'mongoose';
-
+import {UserModel} from '../../server/dao/user.model';
 
 describe('User model', () => {
 
@@ -10,8 +10,6 @@ describe('User model', () => {
         mockgoose(mongoose);
     });
 
-    var UserModel = require('../../server/dao/user.model');
-    
     it('must defined the model', () => {
         
         var userModel = new UserModel();

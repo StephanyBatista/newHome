@@ -23,7 +23,13 @@
     "typescript": "^2.1.4"
   },
   "dependencies": {
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
+    "http": "0.0.0",
     "mongoose": "^4.7.2",
+    "morgan": "^1.7.0",
+    "path": "^0.12.7",
     "tslint": "^4.0.2",
     "typings": "^2.0.0"
   }
