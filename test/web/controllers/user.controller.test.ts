@@ -1,8 +1,12 @@
 import {assert} from 'chai';
 import {Application, Router} from 'express';
+import {Request} from 'request';
 import * as sinon from 'sinon';
 
-describe('User Controller', () => {
+describe('API User', () => {
 
-    it('')
+    it('should create a new user', () => {
+
+        
+    });
 });

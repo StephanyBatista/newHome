@@ -14,4 +14,4 @@ class Routes {
     }
 }
 exports.Routes = Routes;
-//# sourceMappingURL=Routes.js.map
+//# sourceMappingURL=routes.js.map

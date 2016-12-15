@@ -10,6 +10,7 @@ import favicon = require('serve-favicon');
 export class Startup{
     
     private _app: Application;
+    private _port: string;
 
     get app(){
         return this._app;
@@ -67,10 +68,17 @@ export class Startup{
         });
     }
 
+    public Listen(port: string){
+        this._port = port;
+    }
+
     public Run(){
 
-        this._app.set('port', process.env.PORT || '3000');
-        this._app.listen(process.env.PORT || '3000', () => {console.log('exe')});
+        if(!this._port || this._port == '')
+            this._port = process.env.PORT || '3000';
+        
+        this._app.set('port', this._port);
+        this._app.listen(this._port, () => {console.log('exe')});
         this._app.on('error', (error) => {console.log(error);});
     }
 }

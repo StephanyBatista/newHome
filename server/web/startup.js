@@ -53,9 +53,14 @@ class Startup {
             return null;
         });
     }
+    Listen(port) {
+        this._port = port;
+    }
     Run() {
-        this._app.set('port', process.env.PORT || '3000');
-        this._app.listen(process.env.PORT || '3000', () => { console.log('exe'); });
+        if (!this._port || this._port == '')
+            this._port = process.env.PORT || '3000';
+        this._app.set('port', this._port);
+        this._app.listen(this._port, () => { console.log('exe'); });
         this._app.on('error', (error) => { console.log(error); });
     }
 }
