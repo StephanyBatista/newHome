@@ -17,21 +17,14 @@ export class UserDao{
             this.model = new UserModel().model;
     }
 
-    private generateSchema(){
-        return new Schema({
-            name: String,
-            email: String,
-            birthday: Date,
-            password: String
-        });
-    }
-
     public save(user: User){
-        new this.model({
+        var document = new this.model({
             name: user.name,
             email: user.email,
             birthday: user.birthday,
             password: user.password
-        }).save();
+        });
+
+        return document.save();
     }
 }

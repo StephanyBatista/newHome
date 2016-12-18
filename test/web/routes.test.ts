@@ -1,7 +1,9 @@
 import {assert} from 'chai';
 import {Application, Router} from 'express';
-import {Routes} from '../../server/web/Routes';
 import * as sinon from 'sinon';
+import {Routes} from '../../server/web/Routes';
+import {ErrorsHandler} from '../../server/web/middlewares/errors.handler';
+
 
 describe('Routes', () => {
 
@@ -28,14 +30,30 @@ describe('Routes', () => {
     it('shoud apply the routes in application', () =>{
 
         var app = <Application>{
-            use: (path: string, router: Router) => {
-                assert.equal('/', path);
-                assert.equal(router, routes.router);
-            }
+            use: (path: string, router: Router) => {}
         };
         var useSpy = sinon.spy(app, 'use');
         var routes = new Routes(router);
 
         routes.Apply(app);
+
+        sinon.assert.calledWith(useSpy, '/');
+    });
+
+    it('shoud set the middleware of erros generic', () =>{
+
+        var errorsHandler = new ErrorsHandler();
+        var funcExpected = errorsHandler.generic;
+        
+        var app = <Application>{
+            use: (func) => {}
+        };
+
+        var useSpy = sinon.spy(app, 'use');
+        var routes = new Routes(router);
+
+        routes.Apply(app);
+
+        sinon.assert.calledWithExactly(useSpy, funcExpected);
     });
 });

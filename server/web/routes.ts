@@ -1,5 +1,6 @@
 import {Application, Router} from 'express';
 import {UserController} from './controllers/user.controller';
+import {ErrorsHandler} from './middlewares/errors.handler';
 
 export class Routes{
 
@@ -8,6 +9,7 @@ export class Routes{
     constructor(router: Router){
         
         this.router = router;
+
         this.Configure();
     }   
 
@@ -20,5 +22,7 @@ export class Routes{
     public Apply(app: Application){
         
         app.use('/', this.router);
+        var errorshandler = new ErrorsHandler();
+        app.use(errorshandler.generic);
     }
 }

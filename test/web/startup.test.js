@@ -12,7 +12,7 @@ describe('Web Startup', () => {
         var startup = new startup_1.Startup(app);
         chai_1.assert.isDefined(startup.app);
     });
-    it('should run the app', () => {
+    it('should start the listen', () => {
         var app = {
             use: (param) => { },
             set: (param1, param2) => { },
@@ -22,9 +22,22 @@ describe('Web Startup', () => {
             on: (type, func) => { }
         };
         var startup = new startup_1.Startup(app);
-        startup.Run();
+        startup.listen();
     });
-    it('should select the port of the app', () => {
+    it('should return a server', () => {
+        var app = {
+            use: (param) => { },
+            set: (param1, param2) => { },
+            get: (param) => { return ''; },
+            engine: (param1, param2) => { },
+            listen: (port, func) => { return {}; },
+            on: (type, func) => { }
+        };
+        var startup = new startup_1.Startup(app);
+        var server = startup.listen();
+        chai_1.assert.isNotNull(server);
+    });
+    it('should haver a option to select the port of the app', () => {
         var app = {
             use: (param) => { },
             set: (param1, param2) => { },
@@ -34,8 +47,7 @@ describe('Web Startup', () => {
             on: (type, func) => { }
         };
         var startup = new startup_1.Startup(app);
-        startup.Listen('4000');
-        startup.Run();
+        startup.listen('4000');
     });
 });
 //# sourceMappingURL=startup.test.js.map

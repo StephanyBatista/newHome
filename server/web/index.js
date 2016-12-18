@@ -1,10 +1,8 @@
 "use strict";
-const express = require("express");
-const startup_1 = require("./startup");
-const Routes_1 = require("./Routes");
-var app = express();
-var startup = new startup_1.Startup(app);
-var routes = new Routes_1.Routes(express.Router());
-routes.Apply(app);
-startup.Run();
+const inversify_config_1 = require("../inversify.config");
+var init = function () {
+    //var server = new Server();
+    var server = inversify_config_1.default.get("Server");
+};
+module.exports = init();
 //# sourceMappingURL=index.js.map

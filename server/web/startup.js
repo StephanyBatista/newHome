@@ -20,19 +20,19 @@ class Startup {
         this._app.use(body_parser_1.urlencoded({ extended: true }));
         this._app.use(cookieParser());
         this._app.use(express.static(path_1.join(__dirname, 'public')));
-        app.use(favicon(__dirname + '/public/images/favicon.ico'));
-        //this.ConfigureNoFound();
-        //this.ConfigureErrorMessageInDevelopment();
-        //this.ConfigureError500();
+        this._app.use(favicon(__dirname + '/public/images/favicon.ico'));
+        //this.configureNoFound();
+        //this.configureErrorMessageInDevelopment();
+        //this.configureError500();
     }
-    ConfigureNoFound() {
+    configureNoFound() {
         this._app.use((req, res, next) => {
             var err = new Error('Not Found');
             err['status'] = 404;
             next(err);
         });
     }
-    ConfigureErrorMessageInDevelopment() {
+    configureErrorMessageInDevelopment() {
         if (this._app.get('env') === 'development') {
             this._app.use((error, req, res, next) => {
                 res.status(error['status'] || 500);
@@ -43,7 +43,7 @@ class Startup {
             });
         }
     }
-    ConfigureError500() {
+    configureError500() {
         this._app.use((error, req, res, next) => {
             res.status(error['status'] || 500);
             res.render('error', {
@@ -53,15 +53,12 @@ class Startup {
             return null;
         });
     }
-    Listen(port) {
-        this._port = port;
-    }
-    Run() {
-        if (!this._port || this._port == '')
-            this._port = process.env.PORT || '3000';
-        this._app.set('port', this._port);
-        this._app.listen(this._port, () => { console.log('exe'); });
+    listen(port) {
+        if (!port || port == '')
+            port = process.env.PORT || '3000';
+        this._app.set('port', port);
         this._app.on('error', (error) => { console.log(error); });
+        return this._app.listen(port, () => { });
     }
 }
 exports.Startup = Startup;

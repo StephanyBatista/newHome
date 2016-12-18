@@ -12,7 +12,7 @@ describe('User dao', () => {
         mockgoose(Mongoose);
     });
     
-    var user = new User("user", "user@gmail.com", new Date());
+    var user = new User(null, "user", "user@gmail.com", new Date());
     user.updatePassword("123");
     
     it('should create a new document when save a user', () => {

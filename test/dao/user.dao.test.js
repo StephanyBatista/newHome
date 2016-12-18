@@ -8,7 +8,7 @@ describe('User dao', () => {
         var mockgoose = require('mockgoose');
         mockgoose(mongoose_1.Mongoose);
     });
-    var user = new user_1.User("user", "user@gmail.com", new Date());
+    var user = new user_1.User(null, "user", "user@gmail.com", new Date());
     user.updatePassword("123");
     it('should create a new document when save a user', () => {
         var modelStub = class ModelMock {

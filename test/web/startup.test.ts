@@ -18,7 +18,7 @@ describe('Web Startup', () => {
         assert.isDefined(startup.app);
     });
 
-    it('should run the app', () =>  {
+    it('should start the listen', () =>  {
         
         var app = <express.Application>{
             use: (param: any) => {},
@@ -31,10 +31,27 @@ describe('Web Startup', () => {
         
         var startup = new Startup(app);
 
-        startup.Run();
+        startup.listen();
     });
 
-    it('should select the port of the app', () =>  {
+    it('should return a server', () =>  {
+        
+        var app = <express.Application>{
+            use: (param: any) => {},
+            set: (param1: any, param2: any) => {},
+            get: (param: any) => {return ''},
+            engine: (param1: any, param2: any) => {},
+            listen: (port, func) => { return {}},
+            on: (type, func) => {}
+        };
+        var startup = new Startup(app);
+
+        var server = startup.listen();
+
+        assert.isNotNull(server);
+    });
+
+    it('should haver a option to select the port of the app', () =>  {
         
         var app = <express.Application>{
             use: (param: any) => {},
@@ -44,9 +61,8 @@ describe('Web Startup', () => {
             listen: (port, func) => {assert.equal('4000', port);},
             on: (type, func) => {}
         };
-        
         var startup = new Startup(app);
-        startup.Listen('4000');
-        startup.Run();
+        
+        startup.listen('4000');
     });
 });

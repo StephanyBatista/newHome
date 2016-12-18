@@ -1,9 +1,14 @@
 {
     "compilerOptions": {
+
         "module": "commonjs",
         "target": "es6",
         "noImplicitAny": false,
-        "sourceMap": true
+        "sourceMap": true,
+        "experimentalDecorators": true,
+        "lib": ["es6", "dom"],
+        "emitDecoratorMetadata": true
+        
     },
     "exclude": [
         "node_modules"

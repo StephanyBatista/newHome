@@ -10,7 +10,6 @@ import favicon = require('serve-favicon');
 export class Startup{
     
     private _app: Application;
-    private _port: string;
 
     get app(){
         return this._app;
@@ -27,14 +26,13 @@ export class Startup{
         this._app.use(urlencoded({ extended: true }));
         this._app.use(cookieParser());
         this._app.use(express.static(join(__dirname, 'public')));
-        app.use(favicon(__dirname + '/public/images/favicon.ico'));
-        
-        //this.ConfigureNoFound();
-        //this.ConfigureErrorMessageInDevelopment();
-        //this.ConfigureError500();
+        this._app.use(favicon(__dirname + '/public/images/favicon.ico'));
+        //this.configureNoFound();
+        //this.configureErrorMessageInDevelopment();
+        //this.configureError500();
     }
 
-    private ConfigureNoFound(){
+    private configureNoFound(){
 
         this._app.use((req, res, next) => {
             var err = new Error('Not Found');
@@ -43,7 +41,7 @@ export class Startup{
         });
     }
 
-    private ConfigureErrorMessageInDevelopment(){
+    private configureErrorMessageInDevelopment(){
         
         if (this._app.get('env') === 'development') {
             this._app.use((error: any, req, res, next) => {
@@ -56,7 +54,7 @@ export class Startup{
         }
     }
 
-    private ConfigureError500(){
+    private configureError500(){
         
         this._app.use((error: any, req, res, next) => {
             res.status(error['status'] || 500);
@@ -68,17 +66,13 @@ export class Startup{
         });
     }
 
-    public Listen(port: string){
-        this._port = port;
-    }
+    public listen(port?: string){
 
-    public Run(){
-
-        if(!this._port || this._port == '')
-            this._port = process.env.PORT || '3000';
+        if(!port || port == '')
+            port = process.env.PORT || '3000';
         
-        this._app.set('port', this._port);
-        this._app.listen(this._port, () => {console.log('exe')});
+        this._app.set('port', port);
         this._app.on('error', (error) => {console.log(error);});
+        return this._app.listen(port, () => {});
     }
 }

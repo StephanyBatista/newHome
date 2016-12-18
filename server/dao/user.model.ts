@@ -1,4 +1,4 @@
-import {Mongoose, Model, Schema} from 'mongoose';
+import {Mongoose, Model, Schema, Promise} from 'mongoose';
 import {IUser} from './iuser';
 
 export class UserModel{
@@ -7,8 +7,10 @@ export class UserModel{
 
     constructor(){
         
-        var mongoose = new Mongoose();
-        this.model = mongoose.model<IUser>('User', this.generateSchema());
+        var uri = 'mongodb://localhost/newHome';
+        var mongoose = new Mongoose(); 
+        var db = mongoose.connect(uri);
+        this.model = db.model<IUser>('User', this.generateSchema());
     }
 
     private generateSchema(){

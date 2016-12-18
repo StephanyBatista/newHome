@@ -9,21 +9,14 @@ class UserDao {
         if (this.model == null)
             this.model = new user_model_1.UserModel().model;
     }
-    generateSchema() {
-        return new mongoose_1.Schema({
-            name: String,
-            email: String,
-            birthday: Date,
-            password: String
-        });
-    }
     save(user) {
-        new this.model({
+        var document = new this.model({
             name: user.name,
             email: user.email,
             birthday: user.birthday,
             password: user.password
-        }).save();
+        });
+        return document.save();
     }
 }
 exports.UserDao = UserDao;
