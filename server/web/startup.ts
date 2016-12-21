@@ -6,6 +6,8 @@ import {json, urlencoded} from 'body-parser';
 import {swig} from 'consolidate';
 import cookieParser = require('cookie-parser');
 import favicon = require('serve-favicon');
+import {RouterManager} from './router.manager';
+import {ErrorsHandler} from './middlewares/errors.handler'
 
 export class Startup{
     
@@ -15,7 +17,7 @@ export class Startup{
         return this._app;
     }
     
-    constructor(app: Application){
+    constructor(app: Application, routerManager: RouterManager, errorshandler: ErrorsHandler){
         
         this._app = app;
         this._app.engine('html', swig);
@@ -27,6 +29,8 @@ export class Startup{
         this._app.use(cookieParser());
         this._app.use(express.static(join(__dirname, 'public')));
         this._app.use(favicon(__dirname + '/public/images/favicon.ico'));
+        this._app.use('/', routerManager.router);
+        this._app.use(errorshandler.generic);
         //this.configureNoFound();
         //this.configureErrorMessageInDevelopment();
         //this.configureError500();

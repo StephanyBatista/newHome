@@ -1,4 +1,4 @@
-import {DomainException} from './DomainException';
+import {DomainException} from './domain.exception';
 
 export class User{
     readonly id?: string;

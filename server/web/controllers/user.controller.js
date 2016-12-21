@@ -2,7 +2,8 @@
 const User_1 = require("../../model/User");
 const user_dao_1 = require("../../dao/user.dao");
 class UserController {
-    constructor() {
+    constructor(userDao) {
+        this._userDao = userDao;
     }
     post(req, resp, next) {
         var user = new User_1.User(req.body.id, req.body.name, req.body.email, req.body.birthday);

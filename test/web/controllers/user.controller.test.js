@@ -1,12 +1,11 @@
 "use strict";
 const chai_1 = require("chai");
-const server_1 = require("../../../server/web/server");
 describe('API User', () => {
     var server;
     var request = require('request');
     var baseUrl = 'http://localhost:4567';
     before(() => {
-        server = new server_1.Server("4567");
+        server = require('../../../bootstrap')(4567);
     });
     after(() => {
         server.close();

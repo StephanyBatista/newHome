@@ -1,7 +1,6 @@
 import {assert} from 'chai';
 import {Application, Router} from 'express';
 import * as sinon from 'sinon';
-import {Server} from '../../../server/web/server';
 
 describe('API User', () => {
 
@@ -10,7 +9,7 @@ describe('API User', () => {
     var baseUrl = 'http://localhost:4567';
 
     before(() => {
-        server = new Server("4567");
+        server = require('../../../bootstrap')(4567);
     });
 
     after(() => {

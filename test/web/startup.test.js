@@ -1,7 +1,15 @@
 "use strict";
-const startup_1 = require("../../server/web/startup");
+const sinon = require("sinon");
 const chai_1 = require("chai");
+const startup_1 = require("../../server/web/startup");
+const errors_handler_1 = require("../../server/web/middlewares/errors.handler");
 describe('Web Startup', () => {
+    var routerManager = {
+        router: {}
+    };
+    var errorsHandler = {
+        generic: (err, req, res, next) => { }
+    };
     it('should create the app', () => {
         var app = {
             use: (param) => { },
@@ -9,8 +17,26 @@ describe('Web Startup', () => {
             get: (param) => { return ''; },
             engine: (param1, param2) => { }
         };
-        var startup = new startup_1.Startup(app);
+        var startup = new startup_1.Startup(app, routerManager, errorsHandler);
         chai_1.assert.isDefined(startup.app);
+    });
+    it('shoud set the routers througt of the routers manager', () => {
+        var app = {
+            use: (func) => { }
+        };
+        var useSpy = sinon.spy(app, 'use');
+        var startup = new startup_1.Startup(app, routerManager, errorsHandler);
+        sinon.assert.calledWithExactly(useSpy, ['/', routerManager.router]);
+    });
+    it('shoud set the middleware of erros generic', () => {
+        var errorsHandler = new errors_handler_1.ErrorsHandler();
+        var funcExpected = errorsHandler.generic;
+        var app = {
+            use: (func) => { }
+        };
+        var useSpy = sinon.spy(app, 'use');
+        var startup = new startup_1.Startup(app, routerManager, errorsHandler);
+        sinon.assert.calledWithExactly(useSpy, funcExpected);
     });
     it('should start the listen', () => {
         var app = {
@@ -21,7 +47,7 @@ describe('Web Startup', () => {
             listen: (port, func) => { chai_1.assert.equal('3000', port); },
             on: (type, func) => { }
         };
-        var startup = new startup_1.Startup(app);
+        var startup = new startup_1.Startup(app, routerManager, errorsHandler);
         startup.listen();
     });
     it('should return a server', () => {
@@ -33,7 +59,7 @@ describe('Web Startup', () => {
             listen: (port, func) => { return {}; },
             on: (type, func) => { }
         };
-        var startup = new startup_1.Startup(app);
+        var startup = new startup_1.Startup(app, routerManager, errorsHandler);
         var server = startup.listen();
         chai_1.assert.isNotNull(server);
     });
@@ -46,7 +72,7 @@ describe('Web Startup', () => {
             listen: (port, func) => { chai_1.assert.equal('4000', port); },
             on: (type, func) => { }
         };
-        var startup = new startup_1.Startup(app);
+        var startup = new startup_1.Startup(app, routerManager, errorsHandler);
         startup.listen('4000');
     });
 });

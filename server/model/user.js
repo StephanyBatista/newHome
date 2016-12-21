@@ -1,13 +1,13 @@
 "use strict";
-const DomainException_1 = require("./DomainException");
+const domain_exception_1 = require("./domain.exception");
 class User {
     get password() {
         return this._password;
     }
     constructor(id, name, email, birthday) {
-        DomainException_1.DomainException.when(name == null || name == '', "Name is required");
-        DomainException_1.DomainException.when(email == null || email == '', "E-mail is required");
-        DomainException_1.DomainException.when(birthday == null, "Birthday is required");
+        domain_exception_1.DomainException.when(name == null || name == '', "Name is required");
+        domain_exception_1.DomainException.when(email == null || email == '', "E-mail is required");
+        domain_exception_1.DomainException.when(birthday == null, "Birthday is required");
         if (id)
             this.id = id;
         this.name = name;

@@ -1,4 +1,3 @@
-import {injectable} from "inversify";
 import {Request, Response} from 'express';
 import {User} from '../../model/User';
 import {UserDao} from '../../dao/user.dao';
@@ -8,8 +7,8 @@ export class UserController{
 
     private _userDao: UserDao;
     
-    public constructor(){
-        
+    public constructor(userDao: UserDao){
+        this._userDao = userDao;
     }
 
     public post(req, resp, next){

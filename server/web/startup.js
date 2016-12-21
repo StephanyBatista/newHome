@@ -10,7 +10,7 @@ class Startup {
     get app() {
         return this._app;
     }
-    constructor(app) {
+    constructor(app, routerManager, errorshandler) {
         this._app = app;
         this._app.engine('html', consolidate_1.swig);
         this._app.set('view engine', 'html');
@@ -21,6 +21,8 @@ class Startup {
         this._app.use(cookieParser());
         this._app.use(express.static(path_1.join(__dirname, 'public')));
         this._app.use(favicon(__dirname + '/public/images/favicon.ico'));
+        this._app.use('/', routerManager.router);
+        this._app.use(errorshandler.generic);
         //this.configureNoFound();
         //this.configureErrorMessageInDevelopment();
         //this.configureError500();
