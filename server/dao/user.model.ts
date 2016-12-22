@@ -1,19 +1,10 @@
 import {Mongoose, Model, Schema, Promise} from 'mongoose';
 import {IUser} from './iuser';
+import {Db} from './db';
 
-export class UserModel{
+export class UserSchemaGenerator{
 
-    readonly model: Model<IUser>;
-
-    constructor(){
-        
-        var uri = 'mongodb://localhost/newHome';
-        var mongoose = new Mongoose(); 
-        var db = mongoose.connect(uri);
-        this.model = db.model<IUser>('User', this.generateSchema());
-    }
-
-    private generateSchema(){
+    public static generate(){
         return new Schema({
             name: String,
             email: String,

@@ -22,17 +22,23 @@ describe('Web Startup', () => {
     });
     it('shoud set the routers througt of the routers manager', () => {
         var app = {
-            use: (func) => { }
+            use: (func) => { },
+            engine: (param1, param2) => { },
+            set: (param1, param2) => { },
+            get: (param) => { return ''; }
         };
         var useSpy = sinon.spy(app, 'use');
         var startup = new startup_1.Startup(app, routerManager, errorsHandler);
-        sinon.assert.calledWithExactly(useSpy, ['/', routerManager.router]);
+        sinon.assert.calledWith(useSpy, '/', routerManager.router);
     });
     it('shoud set the middleware of erros generic', () => {
         var errorsHandler = new errors_handler_1.ErrorsHandler();
         var funcExpected = errorsHandler.generic;
         var app = {
-            use: (func) => { }
+            use: (func) => { },
+            engine: (param1, param2) => { },
+            set: (param1, param2) => { },
+            get: (param) => { return ''; }
         };
         var useSpy = sinon.spy(app, 'use');
         var startup = new startup_1.Startup(app, routerManager, errorsHandler);

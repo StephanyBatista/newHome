@@ -1,13 +1,9 @@
 "use strict";
-const mongoose_1 = require("mongoose");
-const user_model_1 = require("../../server/dao/user.model");
+const user_1 = require("../../server/model/user");
 class UserDao {
-    constructor(model) {
-        var mongoose = new mongoose_1.Mongoose();
-        mongoose.connect('mongodb://localhost/newHome');
-        this.model = model;
-        if (this.model == null)
-            this.model = new user_model_1.UserModel().model;
+    constructor(db, schema) {
+        this.db = db;
+        this.model = db.mongoose.model('User', schema);
     }
     save(user) {
         var document = new this.model({
@@ -17,6 +13,15 @@ class UserDao {
             password: user.password
         });
         return document.save();
+    }
+    getByEmail(email) {
+        return new Promise((resolve, reject) => {
+            this.model.findOne({ email: email }, (error, userResp) => {
+                if (error)
+                    reject(error);
+                resolve(new user_1.User(userResp.id.toString(), userResp.name, userResp.email, userResp.birthday));
+            });
+        });
     }
 }
 exports.UserDao = UserDao;

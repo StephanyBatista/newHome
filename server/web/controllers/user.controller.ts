@@ -1,7 +1,7 @@
 import {Request, Response} from 'express';
 import {User} from '../../model/User';
 import {UserDao} from '../../dao/user.dao';
-import {UserModel} from '../../dao/user.model';
+import {UserSchemaGenerator} from '../../dao/user.model';
 
 export class UserController{
 
@@ -16,8 +16,7 @@ export class UserController{
         var user = new User(req.body.id, req.body.name, req.body.email, req.body.birthday);
         user.updatePassword(req.body.password);
 
-        var dao = new UserDao();
-        dao.save(user).then(
+        this._userDao.save(user).then(
             () => {
                 resp.json({success: true});
             }, 

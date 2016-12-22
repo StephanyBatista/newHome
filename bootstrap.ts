@@ -1,7 +1,7 @@
 import {Db} from './server/dao/db';
 import {Mongoose} from 'mongoose';
 import * as express from 'express';
-import {UserModel} from './server/dao/user.model';
+import {UserSchemaGenerator} from './server/dao/user.model';
 import {UserDao} from './server/dao/user.dao';
 import {UserController} from './server/web/controllers/user.controller';
 import {RouterManager} from './server/web/router.manager';
@@ -15,8 +15,7 @@ module.exports = function(port?: string){
     //Data Base
     var mongoose = new Mongoose();
     var db = new Db(mongoose);
-    var userModel = new UserModel();
-    var userDao = new UserDao(userModel.model);
+    var userDao = new UserDao(db, UserSchemaGenerator.generate());
     
     //Controllers
     var userController = new UserController(userDao);
@@ -26,5 +25,5 @@ module.exports = function(port?: string){
 
     //Application
     var app = new Startup(express(), routers, new ErrorsHandler());
-    var server = app.listen(port);
+    return app.listen(port);
 }

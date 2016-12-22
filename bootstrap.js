@@ -13,8 +13,7 @@ module.exports = function (port) {
     //Data Base
     var mongoose = new mongoose_1.Mongoose();
     var db = new db_1.Db(mongoose);
-    var userModel = new user_model_1.UserModel();
-    var userDao = new user_dao_1.UserDao(userModel.model);
+    var userDao = new user_dao_1.UserDao(db, user_model_1.UserSchemaGenerator.generate());
     //Controllers
     var userController = new user_controller_1.UserController(userDao);
     //Routers

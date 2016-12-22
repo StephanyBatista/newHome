@@ -1,20 +1,18 @@
 import {Mongoose, Schema, Model} from 'mongoose';
 import {User} from '../../server/model/user';
-import {UserModel} from '../../server/dao/user.model';
+import {UserSchemaGenerator} from '../../server/dao/user.model';
 import {IUser} from './iuser';
+import {Db} from './db';
 
 export class UserDao{
 
     readonly model: Model<IUser>;
+    readonly db: Db;
 
-    constructor(model?: Model<IUser>){
+    constructor(db: Db, schema: Schema){
 
-        var mongoose = new Mongoose();
-        mongoose.connect('mongodb://localhost/newHome');
-        this.model = model;
-
-        if(this.model == null)
-            this.model = new UserModel().model;
+        this.db = db;
+        this.model = db.mongoose.model<IUser>('User', schema);
     }
 
     public save(user: User){
@@ -26,5 +24,15 @@ export class UserDao{
         });
 
         return document.save();
+    }
+
+    public getByEmail(email: string){
+        
+        return new Promise((resolve, reject) => {
+            this.model.findOne({email: email}, (error: string, userResp: IUser) => {
+                if(error) reject(error);
+                resolve(new User(userResp.id.toString(), userResp.name, userResp.email, userResp.birthday));
+            });
+        });
     }
 }
