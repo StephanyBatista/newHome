@@ -8,18 +8,22 @@ const user_controller_1 = require("./server/web/controllers/user.controller");
 const router_manager_1 = require("./server/web/router.manager");
 const startup_1 = require("./server/web/startup");
 const errors_handler_1 = require("./server/web/middlewares/errors.handler");
-module.exports = function (port) {
+const injector_1 = require("./server/cross/injector");
+var init = function (port) {
     console.log('Up server in the port: ' + port);
     //Data Base
     var mongoose = new mongoose_1.Mongoose();
     var db = new db_1.Db(mongoose);
     var userDao = new user_dao_1.UserDao(db, user_model_1.UserSchemaGenerator.generate());
+    injector_1.default.register("userDao", userDao);
     //Controllers
-    var userController = new user_controller_1.UserController(userDao);
+    var userController = new user_controller_1.UserController();
     //Routers
     var routers = new router_manager_1.RouterManager(express.Router(), userController);
     //Application
     var app = new startup_1.Startup(express(), routers, new errors_handler_1.ErrorsHandler());
     return app.listen(port);
 };
+module.exports = init;
+module.exports = init("3000");
 //# sourceMappingURL=bootstrap.js.map

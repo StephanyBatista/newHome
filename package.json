@@ -2,9 +2,9 @@
   "name": "new-home",
   "version": "1.0.0",
   "description": "new home to company",
-  "main": "index.js",
+  "main": "bootstrap.js",
   "scripts": {
-    "test": "tsc; mocha test --recursive"
+    "test": "mocha test --debug-brk --recursive"
   },
   "author": "salmeidabatista@gmail.com",
   "license": "ISC",
@@ -28,13 +28,12 @@
     "body-parser": "^1.15.2",
     "consolidate": "^0.14.5",
     "cookie-parser": "^1.4.3",
+    "electrolyte": "^0.4.0",
     "express": "^4.14.0",
     "http": "0.0.0",
-    "inversify": "^2.0.0-rc.14",
     "mongoose": "^4.7.2",
     "morgan": "^1.7.0",
     "path": "^0.12.7",
-    "reflect-metadata": "^0.1.8",
     "serve-favicon": "^2.3.2",
     "tslint": "^4.0.2",
     "typings": "^2.0.0"

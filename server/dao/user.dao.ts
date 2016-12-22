@@ -26,13 +26,40 @@ export class UserDao{
         return document.save();
     }
 
+    public update(user: User){
+        return this.model.findOneAndUpdate(
+            {            
+                email: user.email
+            },
+            {
+                name: user.name,
+                email: user.email,
+                birthday: user.birthday,
+                password: user.password
+            }
+        ).exec();
+    }
+
+    public delete(email: string){
+        return this.model.remove(
+            {            
+                email: email
+            }
+        ).exec();
+    }
+
     public getByEmail(email: string){
         
         return new Promise((resolve, reject) => {
             this.model.findOne({email: email}, (error: string, userResp: IUser) => {
                 if(error) reject(error);
-                resolve(new User(userResp.id.toString(), userResp.name, userResp.email, userResp.birthday));
+                else if(userResp)
+                    resolve(new User(userResp.id.toString(), userResp.name, userResp.email, userResp.birthday));
+                else
+                    resolve(null);
             });
         });
     }
 }
+
+exports['@singleton'] = true;

@@ -14,15 +14,34 @@ class UserDao {
         });
         return document.save();
     }
+    update(user) {
+        return this.model.findOneAndUpdate({
+            email: user.email
+        }, {
+            name: user.name,
+            email: user.email,
+            birthday: user.birthday,
+            password: user.password
+        }).exec();
+    }
+    delete(email) {
+        return this.model.remove({
+            email: email
+        }).exec();
+    }
     getByEmail(email) {
         return new Promise((resolve, reject) => {
             this.model.findOne({ email: email }, (error, userResp) => {
                 if (error)
                     reject(error);
-                resolve(new user_1.User(userResp.id.toString(), userResp.name, userResp.email, userResp.birthday));
+                else if (userResp)
+                    resolve(new user_1.User(userResp.id.toString(), userResp.name, userResp.email, userResp.birthday));
+                else
+                    resolve(null);
             });
         });
     }
 }
 exports.UserDao = UserDao;
+exports['@singleton'] = true;
 //# sourceMappingURL=user.dao.js.map
