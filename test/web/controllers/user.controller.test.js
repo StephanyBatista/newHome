@@ -1,5 +1,6 @@
 "use strict";
 const chai_1 = require("chai");
+const injector_1 = require("../../../server/cross/injector");
 describe('API User', () => {
     var server;
     var request = require('request');
@@ -9,8 +10,8 @@ describe('API User', () => {
         server = require('../../../bootstrap');
     });
     after(() => {
-        // var userDao = <UserDao>Injector.getRegistered("userDao");
-        // userDao.delete(emailDefault);
+        var userDao = injector_1.default.getRegistered("userDao");
+        userDao.delete(emailDefault);
     });
     it('should not return sucess when save a user invalid', (done) => {
         request.post({

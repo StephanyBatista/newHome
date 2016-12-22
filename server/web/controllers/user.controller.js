@@ -7,7 +7,8 @@ class UserController {
         userDao.getByEmail(req.body.email).then((userSaved) => {
             if (userSaved)
                 resp.json({ success: false, error: "User with same e-mail already exists" });
-            return UserController.saveUser(req, resp, userDao);
+            else
+                return UserController.saveUser(req, resp, userDao);
         }).catch((error) => {
             resp.json({ success: false, error: error });
         });
@@ -26,12 +27,16 @@ class UserController {
         userDao.getByEmail(req.body.email).then((userSaved) => {
             if (!userSaved)
                 resp.json({ success: false, error: "User was not found" });
-            var user = new User_1.User(null, req.body.name, req.body.email, req.body.birthday);
-            userDao.update(user).then(() => {
-                resp.json({ success: true });
-            }, (error) => {
-                resp.json({ success: false, error: error });
-            });
+            else
+                UserController.updateUser(req, resp, userDao);
+        });
+    }
+    static updateUser(req, resp, userDao) {
+        var user = new User_1.User(null, req.body.name, req.body.email, req.body.birthday);
+        userDao.update(user).then(() => {
+            resp.json({ success: true });
+        }, (error) => {
+            resp.json({ success: false, error: error });
         });
     }
 }

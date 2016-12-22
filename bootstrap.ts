@@ -14,8 +14,7 @@ var init = function(port?: string){
     console.log('Up server in the port: ' + port);
 
     //Data Base
-    var mongoose = new Mongoose();
-    var db = new Db(mongoose);
+    var db = new Db();
     var userDao = new UserDao(db, UserSchemaGenerator.generate());
     Injector.register("userDao", userDao);
     

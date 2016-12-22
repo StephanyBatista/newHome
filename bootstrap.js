@@ -1,6 +1,5 @@
 "use strict";
 const db_1 = require("./server/dao/db");
-const mongoose_1 = require("mongoose");
 const express = require("express");
 const user_model_1 = require("./server/dao/user.model");
 const user_dao_1 = require("./server/dao/user.dao");
@@ -12,8 +11,7 @@ const injector_1 = require("./server/cross/injector");
 var init = function (port) {
     console.log('Up server in the port: ' + port);
     //Data Base
-    var mongoose = new mongoose_1.Mongoose();
-    var db = new db_1.Db(mongoose);
+    var db = new db_1.Db();
     var userDao = new user_dao_1.UserDao(db, user_model_1.UserSchemaGenerator.generate());
     injector_1.default.register("userDao", userDao);
     //Controllers

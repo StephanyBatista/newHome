@@ -16,8 +16,8 @@ describe('API User', () => {
     });
 
     after(() => {
-        // var userDao = <UserDao>Injector.getRegistered("userDao");
-        // userDao.delete(emailDefault);
+        var userDao = <UserDao>Injector.getRegistered("userDao");
+        userDao.delete(emailDefault);
     });
 
     it('should not return sucess when save a user invalid', (done) => {

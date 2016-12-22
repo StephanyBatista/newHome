@@ -5,7 +5,7 @@ var name = "user";
 var email = "user@gmail.com";
 var birthday = new Date('25/11/1985');
 
-describe('domain user', () => {
+describe('Domain User', () => {
     it('should be able create a user', () => {
         
         var user = new User(null, name, email, birthday);

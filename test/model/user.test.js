@@ -4,7 +4,7 @@ const user_1 = require("../../server/model/user");
 var name = "user";
 var email = "user@gmail.com";
 var birthday = new Date('25/11/1985');
-describe('domain user', () => {
+describe('Domain User', () => {
     it('should be able create a user', () => {
         var user = new user_1.User(null, name, email, birthday);
         chai_1.assert.equal(user.name, name);

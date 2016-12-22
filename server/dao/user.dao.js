@@ -15,13 +15,13 @@ class UserDao {
         return document.save();
     }
     update(user) {
-        return this.model.findOneAndUpdate({
+        return this.model.update({
             email: user.email
         }, {
-            name: user.name,
-            email: user.email,
-            birthday: user.birthday,
-            password: user.password
+            $set: {
+                name: user.name,
+                birthday: user.birthday
+            }
         }).exec();
     }
     delete(email) {
@@ -43,5 +43,4 @@ class UserDao {
     }
 }
 exports.UserDao = UserDao;
-exports['@singleton'] = true;
 //# sourceMappingURL=user.dao.js.map

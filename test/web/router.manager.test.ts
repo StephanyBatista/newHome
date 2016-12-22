@@ -7,7 +7,8 @@ import {UserController} from '../../server/web/controllers/user.controller';
 describe('Routes', () => {
 
     var router = <Router>{
-        post: (path, func) => {}
+        post: (path, func) => {},
+        put: (path, func) => {}
     };
 
     var userController = <UserController>{
@@ -28,5 +29,14 @@ describe('Routes', () => {
         var routes = new RouterManager(router, userController);
 
         sinon.assert.calledWith(postSpy, '/api/v1/user');
+    });
+
+    it('shoud create endpoint PUT /api/v1/user', () =>{
+
+        var putSpy = sinon.spy(router, 'put');
+        
+        var routes = new RouterManager(router, userController);
+
+        sinon.assert.calledWith(putSpy, '/api/v1/user');
     });
 });

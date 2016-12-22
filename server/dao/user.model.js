@@ -3,10 +3,10 @@ const mongoose_1 = require("mongoose");
 class UserSchemaGenerator {
     static generate() {
         return new mongoose_1.Schema({
-            name: String,
-            email: String,
-            birthday: Date,
-            password: String
+            name: { type: String, required: true },
+            email: { type: String, index: true, unique: true, required: true },
+            birthday: { type: Date, required: true },
+            password: { type: String, required: true }
         });
     }
 }

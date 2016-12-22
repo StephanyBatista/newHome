@@ -1,18 +1,13 @@
-import {Mongoose, Connection} from 'mongoose';
+import {Mongoose} from 'mongoose';
 
 export class Db{
     
     readonly mongoose: Mongoose;
 
-    constructor(mongoose: Mongoose){
+    constructor(){
         
+        var mongoose = require('mongoose')
+        mongoose.Promise = require('bluebird');
         this.mongoose = mongoose.connect('mongodb://localhost/newHome');
-        this.mongoose.connection.db.Promise = require('bluebird');
-    }
-
-    public clone(){
-        
-        if(this.mongoose.connection)
-            this.mongoose.connection.close();
     }
 }

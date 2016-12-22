@@ -16,6 +16,7 @@ export class UserDao{
     }
 
     public save(user: User){
+        
         var document = new this.model({
             name: user.name,
             email: user.email,
@@ -27,20 +28,22 @@ export class UserDao{
     }
 
     public update(user: User){
-        return this.model.findOneAndUpdate(
+        
+        return this.model.update(
             {            
                 email: user.email
             },
             {
-                name: user.name,
-                email: user.email,
-                birthday: user.birthday,
-                password: user.password
+                $set: {
+                    name: user.name,
+                    birthday: user.birthday
+                }
             }
         ).exec();
     }
 
     public delete(email: string){
+        
         return this.model.remove(
             {            
                 email: email
@@ -61,5 +64,3 @@ export class UserDao{
         });
     }
 }
-
-exports['@singleton'] = true;
