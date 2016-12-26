@@ -1,16 +1,20 @@
 "use strict";
 const express = require("express");
+const session = require("express-session");
 const path_1 = require("path");
 const logger = require("morgan");
 const body_parser_1 = require("body-parser");
 const consolidate_1 = require("consolidate");
 const cookieParser = require("cookie-parser");
 const favicon = require("serve-favicon");
+const authenticate_1 = require("./middlewares/authenticate");
+var passport = require('passport');
 class Startup {
     get app() {
         return this._app;
     }
     constructor(app, routerManager, errorshandler) {
+        var authenticate = new authenticate_1.Authenticate(passport, routerManager.router);
         this._app = app;
         this._app.engine('html', consolidate_1.swig);
         this._app.set('view engine', 'html');
@@ -21,6 +25,9 @@ class Startup {
         this._app.use(cookieParser());
         this._app.use(express.static(path_1.join(__dirname, 'public')));
         this._app.use(favicon(__dirname + '/public/images/favicon.ico'));
+        this._app.use(session({ secret: '@s3c4etapp#%&*' }));
+        this._app.use(passport.initialize());
+        this._app.use(passport.session());
         this._app.use('/', routerManager.router);
         this._app.use(errorshandler.generic);
         //this.configureNoFound();

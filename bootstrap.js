@@ -4,6 +4,7 @@ const express = require("express");
 const user_model_1 = require("./server/dao/user.model");
 const user_dao_1 = require("./server/dao/user.dao");
 const user_controller_1 = require("./server/web/controllers/user.controller");
+const admin_controller_1 = require("./server/web/controllers/admin.controller");
 const router_manager_1 = require("./server/web/router.manager");
 const startup_1 = require("./server/web/startup");
 const errors_handler_1 = require("./server/web/middlewares/errors.handler");
@@ -16,8 +17,9 @@ var init = function (port) {
     injector_1.default.register("userDao", userDao);
     //Controllers
     var userController = new user_controller_1.UserController();
+    var adminController = new admin_controller_1.AdminController();
     //Routers
-    var routers = new router_manager_1.RouterManager(express.Router(), userController);
+    var routers = new router_manager_1.RouterManager(express.Router(), userController, adminController);
     //Application
     var app = new startup_1.Startup(express(), routers, new errors_handler_1.ErrorsHandler());
     return app.listen(port);

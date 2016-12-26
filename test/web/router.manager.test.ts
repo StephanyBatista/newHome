@@ -3,6 +3,7 @@ import {Application, Router} from 'express';
 import * as sinon from 'sinon';
 import {RouterManager} from '../../server/web/router.manager';
 import {UserController} from '../../server/web/controllers/user.controller';
+import {AdminController} from '../../server/web/controllers/admin.controller';
 
 describe('Routes', () => {
 
@@ -12,12 +13,17 @@ describe('Routes', () => {
     };
 
     var userController = <UserController>{
-        post: (req, resp, next) => {}
+        post: (req, resp, next) => {},
+        put: (req, resp, next) => {}
+    };
+
+    var adminController = <AdminController>{
+        get: (req, resp, next) => {}
     };
     
     it('shoud create the router manager', () =>{
 
-         var routes = new RouterManager(router, userController);
+         var routes = new RouterManager(router, userController, adminController);
 
          assert.isDefined(routes.router);
     });
@@ -26,7 +32,7 @@ describe('Routes', () => {
 
         var postSpy = sinon.spy(router, 'post');
         
-        var routes = new RouterManager(router, userController);
+        var routes = new RouterManager(router, userController, adminController);
 
         sinon.assert.calledWith(postSpy, '/api/v1/user');
     });
@@ -35,7 +41,7 @@ describe('Routes', () => {
 
         var putSpy = sinon.spy(router, 'put');
         
-        var routes = new RouterManager(router, userController);
+        var routes = new RouterManager(router, userController, adminController);
 
         sinon.assert.calledWith(putSpy, '/api/v1/user');
     });

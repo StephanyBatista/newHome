@@ -1,6 +1,6 @@
 import {Application} from 'express';
 import * as express from 'express';
-import {session} from 'express-session';
+import * as session from 'express-session';
 import {join} from 'path';
 import * as logger from 'morgan';
 import {json, urlencoded} from 'body-parser';

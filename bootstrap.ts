@@ -4,6 +4,7 @@ import * as express from 'express';
 import {UserSchemaGenerator} from './server/dao/user.model';
 import {UserDao} from './server/dao/user.dao';
 import {UserController} from './server/web/controllers/user.controller';
+import {AdminController} from './server/web/controllers/admin.controller';
 import {RouterManager} from './server/web/router.manager';
 import {Startup} from './server/web/startup';
 import {ErrorsHandler} from './server/web/middlewares/errors.handler';
@@ -20,9 +21,10 @@ var init = function(port?: string){
     
     //Controllers
     var userController = new UserController();
+    var adminController = new AdminController();
 
     //Routers
-    var routers = new RouterManager(express.Router(), userController);
+    var routers = new RouterManager(express.Router(), userController, adminController);
 
     //Application
     var app = new Startup(express(), routers, new ErrorsHandler());

@@ -6,32 +6,21 @@ import Injector from '../../cross/injector';
 
 export class UserController{
 
-    public post(req, resp, next){
+    public async post(req, resp, next){
         
         var userDao = <UserDao>Injector.getRegistered("userDao");
-        userDao.getByEmail(req.body.email).then((userSaved) => {
-            if(userSaved)
-                resp.json({success: false, error: "User with same e-mail already exists"});
-            else    
-                return UserController.saveUser(req, resp, userDao);
-        }).catch((error) => {
-            resp.json({success: false, error: error});
-        });
-    }
-
-    static saveUser(req: any, resp: any, userDao: UserDao){
+        var userSaved = await userDao.getByEmail(req.body.email);
         
-        var user = new User(null, req.body.name, req.body.email, req.body.birthday);
-        user.updatePassword(req.body.password);
+        if(userSaved)
+            resp.json({success: false, error: "User with same e-mail already exists"});
 
-        userDao.save(user).then(
-            () => {
-                resp.json({success: true});
-            }, 
-            (error) => {
-                resp.json({success: false, error: error});
-            }
-        );
+        else{
+            var user = new User(null, req.body.name, req.body.email, req.body.birthday);
+            user.updatePassword(req.body.password);    
+
+            await userDao.save(user);
+            resp.json({success: true});
+        }
     }
 
     public put(req, resp, next){
