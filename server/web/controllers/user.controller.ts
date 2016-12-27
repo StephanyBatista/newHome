@@ -2,6 +2,7 @@ import {Request, Response} from 'express';
 import {User} from '../../model/User';
 import {UserDao} from '../../dao/user.dao';
 import {UserSchemaGenerator} from '../../dao/user.model';
+import {SessionFactory, Session} from "hydrate-mongodb";
 import Injector from '../../cross/injector';
 
 export class UserController{
@@ -15,7 +16,11 @@ export class UserController{
         }    
         
         var userDao = <UserDao>Injector.getRegistered("userDao");
-        var userSaved = await userDao.getByEmail(req.body.email);
+        var sessionFactory = <SessionFactory>Injector.getRegistered("sessionFactory");
+        var session = sessionFactory.createSession();
+
+        //var userSaved = await userDao.getByEmail(req.body.email);
+        var userSaved = await session.query(User).findOne({email: req.body.email}).asPromise();
         
         if(userSaved)
         {
@@ -27,22 +32,28 @@ export class UserController{
             var user = new User(null, req.body.name, req.body.email, req.body.birthday);
             user.updatePassword(req.body.password);    
 
-            await userDao.save(user);
+            session.save(user);
+            session.close();
+            //await userDao.save(user);
             resp.json({success: true});
 
         }catch(error){
-            next(error);
+            //next(error);
+            session.close(next(error))
         }
     }
 
     public async put(req, resp, next){
         
         var userDao = <UserDao>Injector.getRegistered("userDao");
+        var sessionFactory = <SessionFactory>Injector.getRegistered("sessionFactory");
+        var session = sessionFactory.createSession();
 
-        var userSaved = await userDao.getByEmail(req.body.email);
+        //var userSaved = await userDao.getByEmail(req.body.email);
+        var userSaved = await session.query(User).findOne({email: req.body.email}).asPromise();
         if(!userSaved)
             resp.json({success: false, error: "User was not found"});
-            
+
         else{
             var user = new User(null, req.body.name, req.body.email, req.body.birthday);
 

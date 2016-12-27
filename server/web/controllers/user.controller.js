@@ -17,7 +17,10 @@ class UserController {
                 return;
             }
             var userDao = injector_1.default.getRegistered("userDao");
-            var userSaved = yield userDao.getByEmail(req.body.email);
+            var sessionFactory = injector_1.default.getRegistered("sessionFactory");
+            var session = sessionFactory.createSession();
+            //var userSaved = await userDao.getByEmail(req.body.email);
+            var userSaved = yield session.query(User_1.User).findOne({ email: req.body.email }).asPromise();
             if (userSaved) {
                 resp.json({ success: false, error: "User with same e-mail already exists" });
                 return;
@@ -25,7 +28,9 @@ class UserController {
             try {
                 var user = new User_1.User(null, req.body.name, req.body.email, req.body.birthday);
                 user.updatePassword(req.body.password);
-                yield userDao.save(user);
+                session.save(user);
+                session.close();
+                //await userDao.save(user);
                 resp.json({ success: true });
             }
             catch (error) {
