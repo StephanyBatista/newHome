@@ -8,18 +8,30 @@ export class UserController{
 
     public async post(req, resp, next){
         
+        if(!req.body.email)
+        {
+            resp.json({success: false, error: "Email was not informed"});
+            return;
+        }    
+        
         var userDao = <UserDao>Injector.getRegistered("userDao");
         var userSaved = await userDao.getByEmail(req.body.email);
         
         if(userSaved)
+        {
             resp.json({success: false, error: "User with same e-mail already exists"});
+            return;
+        }    
 
-        else{
+        try{
             var user = new User(null, req.body.name, req.body.email, req.body.birthday);
             user.updatePassword(req.body.password);    
 
             await userDao.save(user);
             resp.json({success: true});
+
+        }catch(error){
+            next(error);
         }
     }
 

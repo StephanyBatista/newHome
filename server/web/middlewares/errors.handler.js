@@ -1,11 +1,9 @@
 "use strict";
 class ErrorsHandler {
     generic(err, req, res, next) {
-        if (!err) {
+        if (!err)
             return next();
-        }
-        res.status(500);
-        res.send('500: Internal server error');
+        res.status(500).json({ success: false, error: err.message });
     }
 }
 exports.ErrorsHandler = ErrorsHandler;

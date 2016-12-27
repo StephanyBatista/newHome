@@ -12,15 +12,24 @@ const injector_1 = require("../../cross/injector");
 class UserController {
     post(req, resp, next) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!req.body.email) {
+                resp.json({ success: false, error: "Email was not informed" });
+                return;
+            }
             var userDao = injector_1.default.getRegistered("userDao");
             var userSaved = yield userDao.getByEmail(req.body.email);
-            if (userSaved)
+            if (userSaved) {
                 resp.json({ success: false, error: "User with same e-mail already exists" });
-            else {
+                return;
+            }
+            try {
                 var user = new User_1.User(null, req.body.name, req.body.email, req.body.birthday);
                 user.updatePassword(req.body.password);
                 yield userDao.save(user);
                 resp.json({ success: true });
+            }
+            catch (error) {
+                next(error);
             }
         });
     }

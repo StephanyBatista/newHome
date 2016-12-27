@@ -20,11 +20,29 @@ describe('API User', () => {
         userDao.delete(emailDefault);
     });
 
-    it('should not return sucess when save a user invalid', (done) => {
+    it('should not return sucess when email was not informed', (done) => {
 
         request.post(
             {
                 url: baseUrl + '/api/v1/user'
+            }, 
+            (error, resp, body) => {            
+                
+                var bodyJson = JSON.parse(body);
+                assert.isFalse(bodyJson.success);
+                assert.equal("Email was not informed", bodyJson.error);
+                done();
+        });
+    });
+
+    it('should not return sucess when save a user invalid', (done) => {
+
+        request.post(
+            {
+                url: baseUrl + '/api/v1/user',
+                form: {
+                    email: emailDefault
+                }
             }, 
             (error, resp, body) => {            
                 
