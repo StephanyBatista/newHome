@@ -1,3 +1,4 @@
+import {Request, Response} from 'express';
 import {UserDao} from '../../dao/user.dao';
 import {User} from '../../model/user';
 import injector from '../../cross/injector';
@@ -5,12 +6,7 @@ var LocalStrategy = require('passport-local').Strategy;
 
 export class Authenticate{
 
-    constructor(passport: any, router: any){
-
-        this.configure(passport, router);
-    }
-
-    private configure(passport: any, router: any){
+    public static initialize(passport: any, router: any){
 
         var userDao = <UserDao>injector.getRegistered("userDao");
         
@@ -31,37 +27,30 @@ export class Authenticate{
             );
         });
         
-        passport.use(new LocalStrategy(
-            {userNameField: 'email', passwordField: 'password'}, 
-            Authenticate.validateUser));
+        passport.use(new LocalStrategy(Authenticate.validateUser));
 
-        router.put('/signup', passport.authenticate('local-signup', {
-            successRedirect : '/', 
-            failureRedirect : '/signup', 
+        router.get('/login', (req, res, next) => {
+            res.render('login');
+        });
+
+        router.post('/login', passport.authenticate('local', {
+            successRedirect : '/admin/', 
+            failureRedirect : '/login', 
         }));
     }
 
     static validateUser(username, password, done) {
         
         var userDao = <UserDao>injector.getRegistered("userDao");
-        
-        process.nextTick(() => {
-            userDao.getByEmail(username).then(
-                (user: User) => {
-                    if (!user) {
-                        return done(null, false);
-                    }
 
-                    if (user.password != password) {
-                        return done(null, false);
-                    }
+        process.nextTick(async () => {
+            
+            var user = await userDao.getByEmailAndPassword(username, password);
 
-                    return done(null, user);
-                },
-                (error) => {
-                    return done(error);
-                }
-            );
+            if(user)
+                return done(null, user);
+            else
+                return done(null, false);
         });
     }    
 }

@@ -26,20 +26,36 @@ describe('Authenticate', () => {
         userDao.delete(user.email);
     });
 
-    it('should authenticate when email and password is valid', (done) => {
+    it('should authenticate when email and password are valid', (done) => {
 
         request.post(
             {
-                url: baseUrl + '/signup',
+                url: baseUrl + '/login',
                 form:{
-                    email: user.email,
+                    username: user.email,
                     password: user.password
                 }
             }, 
             (error, resp, body) => {
             
-                var bodyJson = JSON.parse(body);
-                assert.isTrue(bodyJson.success);
+                assert.equal('/admin/', resp.headers['location']);
+                done();
+        });
+    });
+
+    it('should authenticate when email and password are invalid', (done) => {
+
+        request.post(
+            {
+                url: baseUrl + '/login',
+                form:{
+                    username: "aaa@gmail.com",
+                    password: "teste123456"
+                }
+            }, 
+            (error, resp, body) => {
+            
+                assert.equal('/login', resp.headers['location']);
                 done();
         });
     });

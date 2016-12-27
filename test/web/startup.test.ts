@@ -8,7 +8,11 @@ import {ErrorsHandler} from '../../server/web/middlewares/errors.handler'
 describe('Web Startup', () => {
     
     var routerManager = <RouterManager>{
-        router: {}
+        router: {
+            post: (path, func) => {},
+            put: (path, func) => {},
+            get: (path, func) => {}
+        }
     };
 
     var errorsHandler = <ErrorsHandler>{

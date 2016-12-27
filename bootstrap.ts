@@ -20,11 +20,11 @@ var init = function(port?: string){
     Injector.register("userDao", userDao);
     
     //Controllers
-    var userController = new UserController();
     var adminController = new AdminController();
+    var userController = new UserController();
 
     //Routers
-    var routers = new RouterManager(express.Router(), userController, adminController);
+    var routers = new RouterManager(express.Router(), adminController, userController);
 
     //Application
     var app = new Startup(express(), routers, new ErrorsHandler());

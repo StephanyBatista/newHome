@@ -54,10 +54,23 @@ export class UserDao{
     public getByEmail(email: string){
         
         return new Promise((resolve, reject) => {
-            this.model.findOne({email: email}, (error: string, userResp: IUser) => {
+            this.model.findOne({email: email}, (error: string, userSaved: IUser) => {
                 if(error) reject(error);
-                else if(userResp)
-                    resolve(new User(userResp.id.toString(), userResp.name, userResp.email, userResp.birthday));
+                else if(userSaved)
+                    resolve(new User(userSaved.id.toString(), userSaved.name, userSaved.email, userSaved.birthday));
+                else
+                    resolve(null);
+            });
+        });
+    }
+
+    public getByEmailAndPassword(email: string, password: string){
+        
+        return new Promise((resolve, reject) => {
+            this.model.findOne({email: email, password: password}, (error: string, userSaved: IUser) => {
+                if(error) reject(null);
+                else if(userSaved)
+                    resolve(new User(userSaved.id.toString(), userSaved.name, userSaved.email, userSaved.birthday));
                 else
                     resolve(null);
             });

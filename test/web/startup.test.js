@@ -5,7 +5,11 @@ const startup_1 = require("../../server/web/startup");
 const errors_handler_1 = require("../../server/web/middlewares/errors.handler");
 describe('Web Startup', () => {
     var routerManager = {
-        router: {}
+        router: {
+            post: (path, func) => { },
+            put: (path, func) => { },
+            get: (path, func) => { }
+        }
     };
     var errorsHandler = {
         generic: (err, req, res, next) => { }

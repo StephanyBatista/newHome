@@ -16,10 +16,10 @@ var init = function (port) {
     var userDao = new user_dao_1.UserDao(db, user_model_1.UserSchemaGenerator.generate());
     injector_1.default.register("userDao", userDao);
     //Controllers
-    var userController = new user_controller_1.UserController();
     var adminController = new admin_controller_1.AdminController();
+    var userController = new user_controller_1.UserController();
     //Routers
-    var routers = new router_manager_1.RouterManager(express.Router(), userController, adminController);
+    var routers = new router_manager_1.RouterManager(express.Router(), adminController, userController);
     //Application
     var app = new startup_1.Startup(express(), routers, new errors_handler_1.ErrorsHandler());
     return app.listen(port);

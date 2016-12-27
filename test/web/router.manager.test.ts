@@ -9,7 +9,8 @@ describe('Routes', () => {
 
     var router = <Router>{
         post: (path, func) => {},
-        put: (path, func) => {}
+        put: (path, func) => {},
+        get: (path, func) => {}
     };
 
     var userController = <UserController>{
@@ -19,30 +20,39 @@ describe('Routes', () => {
 
     var adminController = <AdminController>{
         get: (req, resp, next) => {}
-    };
+    };    
     
     it('shoud create the router manager', () =>{
 
-         var routes = new RouterManager(router, userController, adminController);
-
+         var routes = new RouterManager(router, adminController, userController);
+         
          assert.isDefined(routes.router);
+    });
+
+    it('shoud create endpoint GET /admin/', () =>{
+
+        var postSpy = sinon.spy(router, 'get');
+
+        var routes = new RouterManager(router, adminController, userController);
+        
+        sinon.assert.calledWith(postSpy, '/admin/');
     });
 
     it('shoud create endpoint POST /api/v1/user', () =>{
 
         var postSpy = sinon.spy(router, 'post');
-        
-        var routes = new RouterManager(router, userController, adminController);
 
+        var routes = new RouterManager(router, adminController, userController);
+        
         sinon.assert.calledWith(postSpy, '/api/v1/user');
     });
 
     it('shoud create endpoint PUT /api/v1/user', () =>{
 
         var putSpy = sinon.spy(router, 'put');
-        
-        var routes = new RouterManager(router, userController, adminController);
 
+        var routes = new RouterManager(router, adminController, userController);
+        
         sinon.assert.calledWith(putSpy, '/api/v1/user');
     });
 });

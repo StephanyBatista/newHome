@@ -4,12 +4,13 @@ import * as session from 'express-session';
 import {join} from 'path';
 import * as logger from 'morgan';
 import {json, urlencoded} from 'body-parser';
-import {swig} from 'consolidate';
-import cookieParser = require('cookie-parser');
-import favicon = require('serve-favicon');
 import {RouterManager} from './router.manager';
 import {ErrorsHandler} from './middlewares/errors.handler'
 import {Authenticate} from './middlewares/authenticate';
+import favicon = require('serve-favicon');
+import cookieParser = require('cookie-parser');
+import consolidate = require('consolidate');
+
 var passport = require('passport');
 
 export class Startup{
@@ -22,10 +23,10 @@ export class Startup{
     
     constructor(app: Application, routerManager: RouterManager, errorshandler: ErrorsHandler){
         
-        var authenticate = new Authenticate(passport, routerManager.router);
+        
         
         this._app = app;
-        this._app.engine('html', swig);
+        app.engine('html', consolidate.swig);
         this._app.set('view engine', 'html');
         this._app.set('views', __dirname + '/views');   
         this._app.use(logger('dev'));
@@ -34,9 +35,10 @@ export class Startup{
         this._app.use(cookieParser());
         this._app.use(express.static(join(__dirname, 'public')));
         this._app.use(favicon(__dirname + '/public/images/favicon.ico'));
-        this._app.use(session({secret: '@s3c4etapp#%&*'}))
+        this._app.use(session({secret: '@s3c4etapp#%&*', resave: true, saveUninitialized: true}));
         this._app.use(passport.initialize());
         this._app.use(passport.session());
+        Authenticate.initialize(passport, routerManager.router);
         this._app.use('/', routerManager.router);
         this._app.use(errorshandler.generic);
         //this.configureNoFound();

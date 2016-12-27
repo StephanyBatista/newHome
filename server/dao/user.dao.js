@@ -31,11 +31,23 @@ class UserDao {
     }
     getByEmail(email) {
         return new Promise((resolve, reject) => {
-            this.model.findOne({ email: email }, (error, userResp) => {
+            this.model.findOne({ email: email }, (error, userSaved) => {
                 if (error)
                     reject(error);
-                else if (userResp)
-                    resolve(new user_1.User(userResp.id.toString(), userResp.name, userResp.email, userResp.birthday));
+                else if (userSaved)
+                    resolve(new user_1.User(userSaved.id.toString(), userSaved.name, userSaved.email, userSaved.birthday));
+                else
+                    resolve(null);
+            });
+        });
+    }
+    getByEmailAndPassword(email, password) {
+        return new Promise((resolve, reject) => {
+            this.model.findOne({ email: email, password: password }, (error, userSaved) => {
+                if (error)
+                    reject(null);
+                else if (userSaved)
+                    resolve(new user_1.User(userSaved.id.toString(), userSaved.name, userSaved.email, userSaved.birthday));
                 else
                     resolve(null);
             });

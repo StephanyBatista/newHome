@@ -7,14 +7,15 @@ export class RouterManager{
 
     readonly router: Router;
     
-    constructor(router: Router, userController: UserController, adminController: AdminController){
+    constructor(
+        router: Router, 
+        adminController: AdminController,
+        userController: UserController){
         
         this.router = router;
-
-        this.router.get('/')
+        this.router.get('/admin/', adminController.get);
         this.router.post('/api/v1/user', userController.post);
         this.router.put('/api/v1/user', userController.put);        
-        this.router.get('/admin', adminController.get);   
     }   
 
     public isAuthenticated(req, res, next){
