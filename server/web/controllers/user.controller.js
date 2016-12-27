@@ -34,20 +34,19 @@ class UserController {
         });
     }
     put(req, resp, next) {
-        var userDao = injector_1.default.getRegistered("userDao");
-        userDao.getByEmail(req.body.email).then((userSaved) => {
+        return __awaiter(this, void 0, void 0, function* () {
+            var userDao = injector_1.default.getRegistered("userDao");
+            var userSaved = yield userDao.getByEmail(req.body.email);
             if (!userSaved)
                 resp.json({ success: false, error: "User was not found" });
-            else
-                UserController.updateUser(req, resp, userDao);
-        });
-    }
-    static updateUser(req, resp, userDao) {
-        var user = new User_1.User(null, req.body.name, req.body.email, req.body.birthday);
-        userDao.update(user).then(() => {
-            resp.json({ success: true });
-        }, (error) => {
-            resp.json({ success: false, error: error });
+            else {
+                var user = new User_1.User(null, req.body.name, req.body.email, req.body.birthday);
+                userDao.update(user).then(() => {
+                    resp.json({ success: true });
+                }, (error) => {
+                    resp.json({ success: false, error: error });
+                });
+            }
         });
     }
 }

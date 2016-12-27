@@ -1,10 +1,18 @@
 import {DomainException} from './domain.exception';
+import {Entity, Field} from "hydrate-mongodb";
 
+@Entity()
 export class User{
-    readonly id?: string;
+    
+    @Field()
+    readonly id: string;
+    @Field()
     readonly name: string;
+    @Field()
     readonly email: string;
+    @Field()
     readonly birthday: Date;
+    @Field()
     private _password: string;
 
     get password() {

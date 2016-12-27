@@ -4,6 +4,7 @@ import {UserSchemaGenerator} from '../../server/dao/user.model';
 import {IUser} from './iuser';
 import {Db} from './db';
 
+//https://github.com/artifacthealth/hydrate-mongodb
 export class UserDao{
 
     readonly model: Model<IUser>;

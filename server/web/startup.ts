@@ -23,8 +23,6 @@ export class Startup{
     
     constructor(app: Application, routerManager: RouterManager, errorshandler: ErrorsHandler){
         
-        
-        
         this._app = app;
         app.engine('html', consolidate.swig);
         this._app.set('view engine', 'html');

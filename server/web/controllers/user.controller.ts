@@ -35,27 +35,25 @@ export class UserController{
         }
     }
 
-    public put(req, resp, next){
+    public async put(req, resp, next){
         
         var userDao = <UserDao>Injector.getRegistered("userDao");
-        userDao.getByEmail(req.body.email).then((userSaved) => {
-            if(!userSaved)
-                resp.json({success: false, error: "User was not found"});
-            else
-                UserController.updateUser(req, resp, userDao);
-        });
-    }
 
-    static updateUser(req: any, resp: any, userDao: UserDao){
-        
-        var user = new User(null, req.body.name, req.body.email, req.body.birthday);
-        userDao.update(user).then(
-            () => {
-                resp.json({success: true});
-            },
-            (error) => {
-                resp.json({success: false, error: error});
-            }
-        );
+        var userSaved = await userDao.getByEmail(req.body.email);
+        if(!userSaved)
+            resp.json({success: false, error: "User was not found"});
+            
+        else{
+            var user = new User(null, req.body.name, req.body.email, req.body.birthday);
+
+            userDao.update(user).then(
+                () => {
+                    resp.json({success: true});
+                },
+                (error) => {
+                    resp.json({success: false, error: error});
+                }
+            );
+        }
     }
 }

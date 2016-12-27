@@ -1,5 +1,6 @@
 "use strict";
 const user_1 = require("../../server/model/user");
+//https://github.com/artifacthealth/hydrate-mongodb
 class UserDao {
     constructor(db, schema) {
         this.db = db;
