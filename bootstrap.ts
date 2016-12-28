@@ -9,10 +9,13 @@ import {RouterManager} from './server/web/router.manager';
 import {Startup} from './server/web/startup';
 import {ErrorsHandler} from './server/web/middlewares/errors.handler';
 import Injector from './server/cross/injector';
+import {ConfigSessionFactory} from './server/infra/config.session.factory'
 
 var init = function(port?: string){
 
     console.log('Up server in the port: ' + port);
+
+    ConfigSessionFactory.create();
 
     //Data Base
     var db = new Db();

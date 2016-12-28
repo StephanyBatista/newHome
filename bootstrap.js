@@ -9,8 +9,10 @@ const router_manager_1 = require("./server/web/router.manager");
 const startup_1 = require("./server/web/startup");
 const errors_handler_1 = require("./server/web/middlewares/errors.handler");
 const injector_1 = require("./server/cross/injector");
+const config_session_factory_1 = require("./server/infra/config.session.factory");
 var init = function (port) {
     console.log('Up server in the port: ' + port);
+    config_session_factory_1.ConfigSessionFactory.create();
     //Data Base
     var db = new db_1.Db();
     var userDao = new user_dao_1.UserDao(db, user_model_1.UserSchemaGenerator.generate());

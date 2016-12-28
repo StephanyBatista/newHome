@@ -28,9 +28,9 @@ class UserController {
             try {
                 var user = new User_1.User(null, req.body.name, req.body.email, req.body.birthday);
                 user.updatePassword(req.body.password);
-                session.save(user);
-                session.close();
-                //await userDao.save(user);
+                // session.save(user);
+                // session.close();
+                yield userDao.save(user);
                 resp.json({ success: true });
             }
             catch (error) {
@@ -41,10 +41,19 @@ class UserController {
     put(req, resp, next) {
         return __awaiter(this, void 0, void 0, function* () {
             var userDao = injector_1.default.getRegistered("userDao");
+            var sessionFactory = injector_1.default.getRegistered("sessionFactory");
+            var session = sessionFactory.createSession();
             var userSaved = yield userDao.getByEmail(req.body.email);
+            //var userSaved = await session.query(User).findOne({email: req.body.email}).asPromise();
             if (!userSaved)
                 resp.json({ success: false, error: "User was not found" });
             else {
+                // userSaved.birthday = req.body.birthday;
+                // userSaved.email = req.body.email;
+                // userSaved.name = req.body.name;
+                // session.save(userSaved);
+                // session.close();
+                // resp.json({success: true});
                 var user = new User_1.User(null, req.body.name, req.body.email, req.body.birthday);
                 userDao.update(user).then(() => {
                     resp.json({ success: true });

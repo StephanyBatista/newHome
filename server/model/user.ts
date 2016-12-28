@@ -5,13 +5,13 @@ import {Entity, Field} from "hydrate-mongodb";
 export class User{
     
     @Field()
-    readonly id: string;
+    id: string;
     @Field()
-    readonly name: string;
+    name: string;
     @Field()
-    readonly email: string;
+    email: string;
     @Field()
-    readonly birthday: Date;
+    birthday: Date;
     @Field()
     private _password: string;
 

@@ -32,14 +32,14 @@ export class UserController{
             var user = new User(null, req.body.name, req.body.email, req.body.birthday);
             user.updatePassword(req.body.password);    
 
-            session.save(user);
-            session.close();
-            //await userDao.save(user);
+            // session.save(user);
+            // session.close();
+            await userDao.save(user);
             resp.json({success: true});
 
         }catch(error){
-            //next(error);
-            session.close(next(error))
+            next(error);
+            //session.close(next(error))
         }
     }
 
@@ -49,12 +49,20 @@ export class UserController{
         var sessionFactory = <SessionFactory>Injector.getRegistered("sessionFactory");
         var session = sessionFactory.createSession();
 
-        //var userSaved = await userDao.getByEmail(req.body.email);
-        var userSaved = await session.query(User).findOne({email: req.body.email}).asPromise();
+        var userSaved = await userDao.getByEmail(req.body.email);
+        //var userSaved = await session.query(User).findOne({email: req.body.email}).asPromise();
         if(!userSaved)
             resp.json({success: false, error: "User was not found"});
 
         else{
+            
+            // userSaved.birthday = req.body.birthday;
+            // userSaved.email = req.body.email;
+            // userSaved.name = req.body.name;
+            // session.save(userSaved);
+            // session.close();
+            // resp.json({success: true});
+            
             var user = new User(null, req.body.name, req.body.email, req.body.birthday);
 
             userDao.update(user).then(

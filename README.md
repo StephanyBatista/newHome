@@ -1,4 +1,5 @@
 # newHome
 
-npm install mocha -g
+npm install mocha bower gulp -g
+
 

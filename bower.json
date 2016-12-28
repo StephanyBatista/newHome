@@ -1,0 +1,21 @@
+{
+  "name": "new-home",
+  "description": "new home to company",
+  "main": "bootstrap.js",
+  "authors": [
+    "salmeidabatista@gmail.com"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.1.1"
+  }
+}

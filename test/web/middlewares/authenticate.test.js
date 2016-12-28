@@ -29,7 +29,7 @@ describe('Authenticate', () => {
             done();
         });
     });
-    it('should authenticate when email and password are invalid', (done) => {
+    it('should not authenticate when email and password are invalid', (done) => {
         request.post({
             url: baseUrl + '/login',
             form: {
