@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const User_1 = require("../../model/User");
+const config_session_factory_1 = require("../../infra/config.session.factory");
 const injector_1 = require("../../cross/injector");
 class UserController {
     post(req, resp, next) {
@@ -17,25 +18,31 @@ class UserController {
                 return;
             }
             var userDao = injector_1.default.getRegistered("userDao");
-            var sessionFactory = injector_1.default.getRegistered("sessionFactory");
-            var session = sessionFactory.createSession();
+            var session = config_session_factory_1.ConfigSessionFactory.session();
+            session.query(User_1.User).findOne({ email: "req.body.email" }, (err, user) => {
+                var a = user;
+                var b = 1;
+            });
             //var userSaved = await userDao.getByEmail(req.body.email);
-            var userSaved = yield session.query(User_1.User).findOne({ email: req.body.email }).asPromise();
-            if (userSaved) {
-                resp.json({ success: false, error: "User with same e-mail already exists" });
-                return;
-            }
-            try {
-                var user = new User_1.User(null, req.body.name, req.body.email, req.body.birthday);
-                user.updatePassword(req.body.password);
-                // session.save(user);
-                // session.close();
-                yield userDao.save(user);
-                resp.json({ success: true });
-            }
-            catch (error) {
-                next(error);
-            }
+            // var configSessionFactory = require('../../infra/config.session.factory');
+            // var session = configSessionFactory.session();
+            // var userSaved = await session.query(User).findOne({email: req.body.email}).asPromise();
+            // if(userSaved)
+            // {
+            //     resp.json({success: false, error: "User with same e-mail already exists"});
+            //     return;
+            // }    
+            // try{
+            //     var user = new User(null, req.body.name, req.body.email, req.body.birthday);
+            //     user.updatePassword(req.body.password);    
+            //     // session.save(user);
+            //     // session.close();
+            //     await userDao.save(user);
+            //     resp.json({success: true});
+            // }catch(error){
+            //     next(error);
+            //     //session.close(next(error))
+            // }
         });
     }
     put(req, resp, next) {
