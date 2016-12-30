@@ -18,4 +18,9 @@ export default class Injector {
         }
         Injector.registry[key] = value;
     }
+
+    public static clear(): void {
+
+        Injector.registry = {};
+    }
 }

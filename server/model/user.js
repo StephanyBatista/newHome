@@ -11,12 +11,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 const domain_exception_1 = require("./domain.exception");
 const hydrate_mongodb_1 = require("hydrate-mongodb");
 let User = class User {
-    constructor(id, name, email, birthday) {
+    constructor(name, email, birthday) {
         domain_exception_1.DomainException.when(name == null || name == '', "Name is required");
         domain_exception_1.DomainException.when(email == null || email == '', "E-mail is required");
         domain_exception_1.DomainException.when(birthday == null, "Birthday is required");
-        if (id)
-            this.id = id;
         this.name = name;
         this.email = email;
         this.birthday = birthday;
@@ -26,9 +24,6 @@ let User = class User {
     }
     updatePassword(password) {
         this._password = password;
-    }
-    hasId() {
-        return this.id != null && this.id != '';
     }
 };
 __decorate([
@@ -49,7 +44,7 @@ __decorate([
 ], User.prototype, "_password", void 0);
 User = __decorate([
     hydrate_mongodb_1.Entity(),
-    __metadata("design:paramtypes", [String, String, String, Date])
+    __metadata("design:paramtypes", [String, String, Date])
 ], User);
 exports.User = User;
 //# sourceMappingURL=user.js.map

@@ -4,6 +4,7 @@ import {assert} from 'chai';
 import {Startup} from '../../server/web/startup';
 import {RouterManager} from '../../server/web/router.manager';
 import {ErrorsHandler} from '../../server/web/middlewares/errors.handler'
+import {SessionFactory} from "hydrate-mongodb";
 
 describe('Web Startup', () => {
     
@@ -18,6 +19,8 @@ describe('Web Startup', () => {
     var errorsHandler = <ErrorsHandler>{
         generic: (err, req, res, next) => {}
     };
+
+    var sessionFactory: SessionFactory = null;
    
     it('should create the app', () =>  {
         
@@ -28,7 +31,7 @@ describe('Web Startup', () => {
             engine: (param1: any, param2: any) => {}
         };
         
-        var startup = new Startup(app, routerManager, errorsHandler);
+        var startup = new Startup(app, routerManager, errorsHandler, sessionFactory);
 
         assert.isDefined(startup.app);
     });
@@ -43,7 +46,7 @@ describe('Web Startup', () => {
         };
         var useSpy = sinon.spy(app, 'use');
         
-        var startup = new Startup(app, routerManager, errorsHandler);
+        var startup = new Startup(app, routerManager, errorsHandler, sessionFactory);
 
         sinon.assert.calledWith(useSpy, '/', routerManager.router);
     });
@@ -60,56 +63,45 @@ describe('Web Startup', () => {
         };
         var useSpy = sinon.spy(app, 'use');
         
-        var startup = new Startup(app, routerManager, errorsHandler);
+        var startup = new Startup(app, routerManager, errorsHandler, sessionFactory);
 
         sinon.assert.calledWithExactly(useSpy, funcExpected);
     });
 
-    it('should start the listen', () =>  {
+    it('should start the listener', (done) =>  {
         
         var app = <express.Application>{
             use: (param: any) => {},
             set: (param1: any, param2: any) => {},
             get: (param: any) => {return ''},
             engine: (param1: any, param2: any) => {},
-            listen: (port, func) => {assert.equal('3000', port);},
+            listen: (port, callback) => {
+                assert.equal('3000', port);
+                process.nextTick(callback);
+            },
             on: (type, func) => {}
         };
         
-        var startup = new Startup(app, routerManager, errorsHandler);
+        var startup = new Startup(app, routerManager, errorsHandler, sessionFactory);
 
-        startup.listen();
+        startup.listen("3000", done);
     });
 
-    it('should return a server', () =>  {
+    it('should have a option to select the port of the app', (done) =>  {
         
         var app = <express.Application>{
             use: (param: any) => {},
             set: (param1: any, param2: any) => {},
             get: (param: any) => {return ''},
             engine: (param1: any, param2: any) => {},
-            listen: (port, func) => { return {}},
+            listen: (port, callback) => {
+                assert.equal('4000', port);
+                process.nextTick(callback);
+            },
             on: (type, func) => {}
         };
-        var startup = new Startup(app, routerManager, errorsHandler);
-
-        var server = startup.listen();
-
-        assert.isNotNull(server);
-    });
-
-    it('should haver a option to select the port of the app', () =>  {
+        var startup = new Startup(app, routerManager, errorsHandler, sessionFactory);
         
-        var app = <express.Application>{
-            use: (param: any) => {},
-            set: (param1: any, param2: any) => {},
-            get: (param: any) => {return ''},
-            engine: (param1: any, param2: any) => {},
-            listen: (port, func) => {assert.equal('4000', port);},
-            on: (type, func) => {}
-        };
-        var startup = new Startup(app, routerManager, errorsHandler);
-        
-        startup.listen('4000');
+        startup.listen('4000', done);
     });
 });

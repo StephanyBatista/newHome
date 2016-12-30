@@ -1,45 +1,50 @@
 import {assert} from 'chai';
 import {Application, Router} from 'express';
 import * as sinon from 'sinon';
-import Injector from '../../../server/cross/injector';
-import {UserDao} from '../../../server/dao/user.dao';
 import {User} from '../../../server/model/user';
+import {init} from "../../../server";
+import {Startup} from "../../../server/web/startup";
+import {Session} from "hydrate-mongodb";
 
 describe('Authenticate', () => {
 
-    var server;
     var request = require('request');
+    var server: Startup;
     var baseUrl = 'http://localhost:3000';
-    var user = new User(null, "user", "user@gmail.com", new Date("1985/11/25"));
-    user.updatePassword("123456");
+    var username = "user@gmail.com";
+    var password = "123456";
+    var session: Session;
+    var user: User;
 
-    before(() => {
-        
-        server = require('../../../bootstrap');
-        var userDao = <UserDao>Injector.getRegistered("userDao");
-        userDao.save(user);
+    before((done) => {
+
+        init("3000", (err, result) => {
+            if (err) return done(err);
+
+            server = result;
+
+            session = server.sessionFactory.createSession();
+
+            user = new User("user", username, new Date("1985/11/25"));
+            user.updatePassword(password);
+
+            session.save(user);
+
+            // flush the session to write changes to the database but keep the session open to remove the user in the 'after' hook
+            session.flush(done);
+        });
     });
 
-    after(() => {
-        
-        var userDao = <UserDao>Injector.getRegistered("userDao");
-        userDao.delete(user.email);
-    });
+    after((done) => {
 
-    it('should authenticate when email and password are valid', (done) => {
+        // delete the user created in the 'before' hook
+        session.remove(user);
+        // flush changes to the database and close the session
+        session.close((err) => {
+            if (err) return done(err);
 
-        request.post(
-            {
-                url: baseUrl + '/login',
-                form:{
-                    username: user.email,
-                    password: user.password
-                }
-            }, 
-            (error, resp, body) => {
-            
-                assert.equal('/admin/', resp.headers['location']);
-                done();
+            // shutdown the http server
+            server.close(done);
         });
     });
 
@@ -52,10 +57,27 @@ describe('Authenticate', () => {
                     username: "aaa@gmail.com",
                     password: "teste123456"
                 }
+            },
+            (error, resp, body) => {
+
+                assert.equal(resp.headers['location'], '/login');
+                done();
+            });
+    });
+
+    it('should authenticate when email and password are valid', (done) => {
+
+        request.post(
+            {
+                url: baseUrl + '/login',
+                form:{
+                    username: username,
+                    password: password
+                }
             }, 
             (error, resp, body) => {
             
-                assert.equal('/login', resp.headers['location']);
+                assert.equal(resp.headers['location'], '/admin/');
                 done();
         });
     });
