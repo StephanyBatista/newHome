@@ -44,7 +44,7 @@ class Startup {
         this._app.use(body_parser_1.urlencoded({ extended: true }));
         this._app.use(cookieParser());
         this._app.use(express.static(path_1.join(__dirname, 'public')));
-        this._app.use(favicon(__dirname + '/public/images/favicon.ico'));
+        this._app.use(favicon(__dirname + '/public/img/favicon.ico'));
         this._app.use(session({ secret: '@s3c4etapp#%&*', resave: true, saveUninitialized: true }));
         this._app.use(passport.initialize());
         this._app.use(passport.session());
