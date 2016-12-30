@@ -21,7 +21,22 @@ class Startup {
         this._app.set('views', __dirname + '/views');
         // create an entity manager for each web request
         this._app.use((req, res, next) => {
+            // add hydrate session to request object
             req.entityManager = sessionFactory.createSession();
+            // add to response object method for closing the hydrate session and sending a JSON response
+            res.sendResponse = (value) => {
+                // close the hydrate session before sending the response to make sure everything flushed to the database ok
+                req.entityManager.close((err) => {
+                    if (err) {
+                        // send error
+                        res.status(500).json({ success: false, error: err.message });
+                    }
+                    else {
+                        // send the response
+                        res.json({ success: true, result: value });
+                    }
+                });
+            };
             next();
         });
         this._app.use(logger('dev'));
@@ -33,13 +48,8 @@ class Startup {
         this._app.use(session({ secret: '@s3c4etapp#%&*', resave: true, saveUninitialized: true }));
         this._app.use(passport.initialize());
         this._app.use(passport.session());
-        authenticate_1.Authenticate.initialize(passport, routerManager.router);
+        authenticate_1.Authenticate.initialize(passport);
         this._app.use('/', routerManager.router);
-        // close the entity manager for each web request. this will flush any changes to the database. if an error occurs upstream it
-        // should skip this step and not flush changes.
-        this._app.use((req, res, next) => {
-            req.entityManager.close(next);
-        });
         this._app.use(errorshandler.generic);
         //this.configureNoFound();
         //this.configureErrorMessageInDevelopment();

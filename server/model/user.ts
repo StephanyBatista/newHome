@@ -1,5 +1,5 @@
 import {DomainException} from './domain.exception';
-import {Entity, Field} from "hydrate-mongodb";
+import {Entity, Field, Index} from "hydrate-mongodb";
 
 @Entity()
 export class User {
@@ -9,7 +9,7 @@ export class User {
     @Field()
     name: string;
 
-    @Field()
+    @Index({ options: { unique: true }})
     email: string;
 
     @Field()
@@ -33,7 +33,14 @@ export class User {
         this.birthday = birthday;
     }
 
-    updatePassword(password: string){
+    updatePassword(password: string): void {
+
         this._password = password;
+    }
+
+    verifyPassword(password: string): boolean {
+
+        // todo: store password hashed. checkout them module 'bcrypt-nodejs'
+        return this.password === password;
     }
 }

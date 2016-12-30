@@ -1,21 +1,22 @@
 import {User} from '../../model/user';
-import {ExpressRequest} from "../expressRequest";
+import {ExpressRequest, ExpressResponse} from "../expressRequest";
 
 export class UserController{
 
-    public async post(req: ExpressRequest, resp, next){
+    public async post(req: ExpressRequest, res: ExpressResponse, next) {
         
         if(!req.body.email)
         {
-            resp.json({success: false, error: "Email was not informed"});
+            next(new Error("Email was not informed"));
             return;
         }    
-        
+
+        // todo: this is not an atomic operation. race condition exists.
         req.entityManager.query(User).findOne({ email: req.body.email }, (err, user: User) => {
             if (err) return next(err);
 
             if (user) {
-                resp.json({success: false, error: "User with same e-mail already exists"});
+                next(new Error("User with same e-mail already exists"));
                 return;
             }
 
@@ -28,22 +29,21 @@ export class UserController{
                 return next(err);
             }
 
-            req.entityManager.save(user);
-            req.entityManager.close((err) => {
+            req.entityManager.save(user, (err) => {
                 if (err) return next(err);
 
-                resp.json({success: true});
+                res.sendResponse(user.id);
             });
         });
     }
 
-    public async put(req: ExpressRequest, resp, next){
+    public async put(req: ExpressRequest, res: ExpressResponse, next) {
 
         req.entityManager.query(User).findOne({ email: req.body.email }, (err, user: User) => {
             if (err) return next(err);
 
             if (!user) {
-                resp.json({success: false, error: "User was not found"});
+                next(new Error("User was not found"));
                 return;
             }
 
@@ -55,12 +55,7 @@ export class UserController{
             user.updatePassword(req.body.password);
 
             // you do not need to call session.save - dirty checking is automatic with the default change tracking
-
-            req.entityManager.close((err) => {
-                if (err) return next(err);
-
-                resp.json({success: true});
-            });
+            res.sendResponse(user.id);
         });
     }
 }

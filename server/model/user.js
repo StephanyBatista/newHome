@@ -25,13 +25,17 @@ let User = class User {
     updatePassword(password) {
         this._password = password;
     }
+    verifyPassword(password) {
+        // todo: store password hashed. checkout them module 'bcrypt-nodejs'
+        return this.password === password;
+    }
 };
 __decorate([
     hydrate_mongodb_1.Field(),
     __metadata("design:type", String)
 ], User.prototype, "name", void 0);
 __decorate([
-    hydrate_mongodb_1.Field(),
+    hydrate_mongodb_1.Index({ options: { unique: true } }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([

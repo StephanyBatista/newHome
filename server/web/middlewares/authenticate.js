@@ -2,7 +2,7 @@
 const user_1 = require("../../model/user");
 var LocalStrategy = require('passport-local').Strategy;
 class Authenticate {
-    static initialize(passport, router) {
+    static initialize(passport) {
         passport.serializeUser((req, user, done) => {
             done(null, user.id);
         });
@@ -15,8 +15,7 @@ class Authenticate {
                 if (err)
                     return done(err);
                 // findOne returns null if user is not found. if we found the user then make sure the passwords match
-                // todo: store password hashed. checkout them module 'bcrypt-nodejs'
-                if (user && user.password == password) {
+                if (user && user.verifyPassword(password)) {
                     done(null, user);
                 }
                 else {

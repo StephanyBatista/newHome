@@ -12,7 +12,7 @@ import cookieParser = require('cookie-parser');
 import consolidate = require('consolidate');
 import {Server} from "http";
 import {SessionFactory} from "hydrate-mongodb";
-import {ExpressRequest} from "./expressRequest";
+import {ExpressRequest, ExpressResponse} from "./expressRequest";
 
 var passport = require('passport');
 
@@ -36,8 +36,27 @@ export class Startup {
         this._app.set('views', __dirname + '/views');
 
         // create an entity manager for each web request
-        this._app.use((req: ExpressRequest, res: express.Response, next: express.NextFunction) => {
+        this._app.use((req: ExpressRequest, res: ExpressResponse, next: express.NextFunction) => {
+
+            // add hydrate session to request object
             req.entityManager = sessionFactory.createSession();
+
+            // add to response object method for closing the hydrate session and sending a JSON response
+            res.sendResponse = (value?: any) => {
+
+                // close the hydrate session before sending the response to make sure everything flushed to the database ok
+                req.entityManager.close((err) => {
+                    if (err) {
+                        // send error
+                        res.status(500).json({ success: false, error: err.message });
+                    }
+                    else {
+                        // send the response
+                        res.json({ success: true, result: value });
+                    }
+                });
+            };
+
             next();
         });
 
@@ -50,15 +69,8 @@ export class Startup {
         this._app.use(session({secret: '@s3c4etapp#%&*', resave: true, saveUninitialized: true}));
         this._app.use(passport.initialize());
         this._app.use(passport.session());
-        Authenticate.initialize(passport, routerManager.router);
+        Authenticate.initialize(passport);
         this._app.use('/', routerManager.router);
-
-        // close the entity manager for each web request. this will flush any changes to the database. if an error occurs upstream it
-        // should skip this step and not flush changes.
-        this._app.use((req: ExpressRequest, res: express.Response, next: express.NextFunction) => {
-            req.entityManager.close(next);
-        });
-
         this._app.use(errorshandler.generic);
         //this.configureNoFound();
         //this.configureErrorMessageInDevelopment();
