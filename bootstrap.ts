@@ -17,14 +17,12 @@ import Injector from './server/cross/injector';
 
 var init = function(port?: string){
 
-    ConfigSessionFactory.create();
-    
-    var config = new Configuration();
-    config.addMapping(new AnnotationMappingProvider(User));
     
     MongoClient.connect('mongodb://localhost/mydatabase', (err, db) => {
         if(err) throw err;
         
+        var config = new Configuration();
+        config.addMapping(new AnnotationMappingProvider(User));
         config.createSessionFactory(db, (err, sessionFactory: SessionFactory) => {
 
             ConfigSessionFactory.setSessionFactory(sessionFactory);

@@ -21,26 +21,6 @@ export class ConfigSessionFactory{
         
         return this._current.createSession();
     }
-    
-    public static create(){
-
-        var config = new Configuration();
-        config.addMapping(new AnnotationMappingProvider(User));
-        
-        MongoClient.connect('mongodb://localhost/mydatabase', (err, db) => {
-            if(err) throw err;
-            
-            config.createSessionFactory(db, (err, sessionFactory: SessionFactory) => {
-
-                var session = sessionFactory.createSession();
-                session.query(User).findOne({email: "req.body.email"}, (err, user: User) => {
-                    var a = user;
-                    var b = 1;
-                });
-
-            });
-        });
-    }
 }
 
 

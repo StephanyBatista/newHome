@@ -34,10 +34,6 @@ let User = class User {
 __decorate([
     hydrate_mongodb_1.Field(),
     __metadata("design:type", String)
-], User.prototype, "id", void 0);
-__decorate([
-    hydrate_mongodb_1.Field(),
-    __metadata("design:type", String)
 ], User.prototype, "name", void 0);
 __decorate([
     hydrate_mongodb_1.Field(),

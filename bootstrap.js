@@ -14,12 +14,11 @@ const config_session_factory_1 = require("./server/infra/config.session.factory"
 const user_1 = require("./server/model/user");
 const injector_1 = require("./server/cross/injector");
 var init = function (port) {
-    config_session_factory_1.ConfigSessionFactory.create();
-    var config = new hydrate_mongodb_1.Configuration();
-    config.addMapping(new hydrate_mongodb_1.AnnotationMappingProvider(user_1.User));
     mongodb_1.MongoClient.connect('mongodb://localhost/mydatabase', (err, db) => {
         if (err)
             throw err;
+        var config = new hydrate_mongodb_1.Configuration();
+        config.addMapping(new hydrate_mongodb_1.AnnotationMappingProvider(user_1.User));
         config.createSessionFactory(db, (err, sessionFactory) => {
             config_session_factory_1.ConfigSessionFactory.setSessionFactory(sessionFactory);
             //Data Base    

@@ -17,7 +17,6 @@ class UserController {
                 resp.json({ success: false, error: "Email was not informed" });
                 return;
             }
-            var userDao = injector_1.default.getRegistered("userDao");
             var session = config_session_factory_1.ConfigSessionFactory.session();
             session.query(User_1.User).findOne({ email: "req.body.email" }, (err, user) => {
                 var a = user;

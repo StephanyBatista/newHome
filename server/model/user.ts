@@ -4,7 +4,6 @@ import {Entity, Field} from "hydrate-mongodb";
 @Entity()
 export class User{
     
-    @Field()
     id: string;
     @Field()
     name: string;
