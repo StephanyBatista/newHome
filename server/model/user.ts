@@ -1,41 +1,46 @@
 import {DomainException} from './domain.exception';
-import {Entity, Field} from "hydrate-mongodb";
+import {Entity, Field, Index} from "hydrate-mongodb";
 
 @Entity()
-export class User{
+export class User {
     
     id: string;
+
     @Field()
     name: string;
-    @Field()
+
+    @Index({ options: { unique: true }})
     email: string;
+
     @Field()
     birthday: Date;
+
     @Field()
     private _password: string;
 
-    get password() {
+    get password(): string {
         return this._password;
     }
     
-    constructor(id: string, name: string, email: string, birthday: Date){
+    constructor(name: string, email: string, birthday: Date){
         
         DomainException.when(name == null || name == '', "Name is required");
         DomainException.when(email == null || email == '', "E-mail is required");
         DomainException.when(birthday == null, "Birthday is required");
         
-        if(id)
-            this.id = id;
         this.name = name;
         this.email = email;
         this.birthday = birthday;
     }
 
-    updatePassword(password: string){
+    updatePassword(password: string): void {
+
         this._password = password;
     }
 
-    hasId(){
-        return this.id != null && this.id != '';
+    verifyPassword(password: string): boolean {
+
+        // todo: store password hashed. checkout them module 'bcrypt-nodejs'
+        return this.password === password;
     }
 }

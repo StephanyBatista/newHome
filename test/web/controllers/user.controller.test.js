@@ -1,19 +1,73 @@
 "use strict";
 const chai_1 = require("chai");
-const injector_1 = require("../../../server/cross/injector");
+const user_1 = require("../../../server/model/user");
+const server_1 = require("../../../server");
 describe('API User', () => {
+    // create a request object with cookied enabled
+    var request = require('request').defaults({ jar: true });
     var server;
-    var request = require('request');
     var baseUrl = 'http://localhost:3000';
     var emailDefault = `${Date.now()}alfred@gmail.com`;
-    before(() => {
-        server = require('../../../bootstrap');
+    var adminUsername = "admin@gmail.com";
+    var adminPassword = "123456";
+    var session;
+    var user;
+    before((done) => {
+        server_1.init("3000", (err, result) => {
+            if (err)
+                return done(err);
+            server = result;
+            session = server.sessionFactory.createSession();
+            // create an admin user so we can logon
+            user = new user_1.User("user", adminUsername, new Date("1985/11/25"));
+            user.updatePassword(adminPassword);
+            session.save(user);
+            // flush the session to write changes to the database but keep the session open to remove the user in the 'after' hook
+            session.flush((err) => {
+                if (err)
+                    return done(err);
+                // since cookies are enabled the authentication will work for all tests that follow
+                authenticate(done);
+            });
+        });
     });
-    after(() => {
-        var userDao = injector_1.default.getRegistered("userDao");
-        userDao.delete(emailDefault);
+    after((done) => {
+        // delete the admin user created in the 'before' hook that was used to logon
+        session.remove(user);
+        // delete the user that was created by the service if one exists
+        session.query(user_1.User).findOne({ email: emailDefault }, (err, createdUser) => {
+            if (err)
+                return done(err);
+            if (!createdUser) {
+                return done();
+            }
+            // delete the user created by the service
+            session.remove(createdUser);
+            // flush changes to the database and close the session
+            session.close((err) => {
+                if (err)
+                    return done(err);
+                // shutdown the http server
+                server.close(done);
+            });
+        });
     });
-    it('should not return sucess when email was not informed', (done) => {
+    function authenticate(next) {
+        request.post({
+            url: baseUrl + '/login',
+            form: {
+                username: adminUsername,
+                password: adminPassword
+            }
+        }, (err, resp, body) => {
+            if (err)
+                return next(err);
+            chai_1.assert.equal(302, resp.statusCode);
+            chai_1.assert.equal(resp.headers['location'], '/admin/');
+            next();
+        });
+    }
+    it('should not return success when email was not informed', (done) => {
         request.post({
             url: baseUrl + '/api/v1/user'
         }, (error, resp, body) => {
@@ -23,7 +77,7 @@ describe('API User', () => {
             done();
         });
     });
-    it('should not return sucess when save a user invalid', (done) => {
+    it('should not return success when save a user invalid', (done) => {
         request.post({
             url: baseUrl + '/api/v1/user',
             form: {
@@ -35,7 +89,7 @@ describe('API User', () => {
             done();
         });
     });
-    it('should return sucess when save the user', (done) => {
+    it('should return success when save the user', (done) => {
         request.post({
             url: baseUrl + '/api/v1/user',
             form: {
@@ -46,7 +100,7 @@ describe('API User', () => {
             }
         }, (error, resp, body) => {
             var bodyJson = JSON.parse(body);
-            chai_1.assert.isTrue(bodyJson.success);
+            chai_1.assert.isTrue(bodyJson.success, bodyJson.error);
             done();
         });
     });

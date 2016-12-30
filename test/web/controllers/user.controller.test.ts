@@ -1,41 +1,110 @@
 import {assert} from 'chai';
 import {Application, Router} from 'express';
 import * as sinon from 'sinon';
-import Injector from '../../../server/cross/injector';
-import {UserDao} from '../../../server/dao/user.dao';
+import {User} from "../../../server/model/user";
+import {init} from "../../../server";
+import {Startup} from "../../../server/web/startup";
+import {Session} from "hydrate-mongodb";
 
 describe('API User', () => {
 
-    var server;
-    var request = require('request');
+    // create a request object with cookied enabled
+    var request = require('request').defaults({jar: true});
+    var server: Startup;
     var baseUrl = 'http://localhost:3000';
     var emailDefault = `${Date.now()}alfred@gmail.com`;
+    var adminUsername = "admin@gmail.com";
+    var adminPassword = "123456";
+    var session: Session;
+    var user: User;
 
-    before(() => {
-        server = require('../../../bootstrap');
+    before((done) => {
+
+        init("3000", (err, result) => {
+            if (err) return done(err);
+
+            server = result;
+
+            session = server.sessionFactory.createSession();
+
+            // create an admin user so we can logon
+            user = new User("user", adminUsername, new Date("1985/11/25"));
+            user.updatePassword(adminPassword);
+
+            session.save(user);
+
+            // flush the session to write changes to the database but keep the session open to remove the user in the 'after' hook
+            session.flush((err) => {
+                if (err) return done(err);
+
+                // since cookies are enabled the authentication will work for all tests that follow
+                authenticate(done);
+            });
+        });
     });
 
-    after(() => {
-        var userDao = <UserDao>Injector.getRegistered("userDao");
-        userDao.delete(emailDefault);
+    after((done) => {
+
+        // delete the admin user created in the 'before' hook that was used to logon
+        session.remove(user);
+
+        // delete the user that was created by the service if one exists
+        session.query(User).findOne({ email: emailDefault }, (err, createdUser) => {
+            if (err) return done(err);
+
+            if (!createdUser) {
+                return done();
+            }
+
+            // delete the user created by the service
+            session.remove(createdUser);
+
+            // flush changes to the database and close the session
+            session.close((err) => {
+                if (err) return done(err);
+
+                // shutdown the http server
+                server.close(done);
+            });
+        });
     });
 
-    it('should not return sucess when email was not informed', (done) => {
+    function authenticate(next: (err?: Error) => void): void {
+
+        request.post(
+            {
+                url: baseUrl + '/login',
+                form:{
+                    username: adminUsername,
+                    password: adminPassword
+                }
+            },
+            (err, resp, body) => {
+                if (err) return next(err);
+
+                assert.equal(302, resp.statusCode);
+                assert.equal(resp.headers['location'], '/admin/');
+
+                next();
+            });
+    }
+
+    it('should not return success when email was not informed', (done) => {
 
         request.post(
             {
                 url: baseUrl + '/api/v1/user'
-            }, 
-            (error, resp, body) => {            
-                
+            },
+            (error, resp, body) => {
+
                 var bodyJson = JSON.parse(body);
                 assert.isFalse(bodyJson.success);
                 assert.equal("Email was not informed", bodyJson.error);
                 done();
-        });
+            });
     });
 
-    it('should not return sucess when save a user invalid', (done) => {
+    it('should not return success when save a user invalid', (done) => {
 
         request.post(
             {
@@ -43,16 +112,16 @@ describe('API User', () => {
                 form: {
                     email: emailDefault
                 }
-            }, 
-            (error, resp, body) => {            
-                
+            },
+            (error, resp, body) => {
+
                 var bodyJson = JSON.parse(body);
                 assert.isFalse(bodyJson.success);
                 done();
         });
     });
     
-    it('should return sucess when save the user', (done) => {
+    it('should return success when save the user', (done) => {
 
         request.post(
             {
@@ -63,11 +132,11 @@ describe('API User', () => {
                     birthday: '1985/11/25',
                     password: '123456'
                 }
-            }, 
+            },
             (error, resp, body) => {
-            
+
                 var bodyJson = JSON.parse(body);
-                assert.isTrue(bodyJson.success);
+                assert.isTrue(bodyJson.success, bodyJson.error);
                 done();
         });
     });
@@ -83,9 +152,9 @@ describe('API User', () => {
                     birthday: '1985/11/25',
                     password: '123456'
                 }
-            }, 
+            },
             (error, resp, body) => {
-            
+
                 var bodyJson = JSON.parse(body);
                 assert.isFalse(bodyJson.success);
                 done();
@@ -102,9 +171,9 @@ describe('API User', () => {
                     email: emailDefault,
                     birthday: '1990/01/01'
                 }
-            }, 
+            },
             (error, resp, body) => {
-            
+
                 var bodyJson = JSON.parse(body);
                 assert.isTrue(bodyJson.success);
                 done();

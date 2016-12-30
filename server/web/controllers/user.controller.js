@@ -7,66 +7,55 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
-const User_1 = require("../../model/User");
-const config_session_factory_1 = require("../../infra/config.session.factory");
-const injector_1 = require("../../cross/injector");
+const user_1 = require("../../model/user");
 class UserController {
-    post(req, resp, next) {
+    post(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!req.body.email) {
-                resp.json({ success: false, error: "Email was not informed" });
+                next(new Error("Email was not informed"));
                 return;
             }
-            var session = config_session_factory_1.ConfigSessionFactory.session();
-            session.query(User_1.User).findOne({ email: "req.body.email" }, (err, user) => {
-                var a = user;
-                var b = 1;
+            // todo: this is not an atomic operation. race condition exists.
+            req.entityManager.query(user_1.User).findOne({ email: req.body.email }, (err, user) => {
+                if (err)
+                    return next(err);
+                if (user) {
+                    next(new Error("User with same e-mail already exists"));
+                    return;
+                }
+                // todo: need to fix this to correctly parse date and take timezone into account OR store date as string
+                try {
+                    user = new user_1.User(req.body.name, req.body.email, new Date(req.body.birthday));
+                    user.updatePassword(req.body.password);
+                }
+                catch (err) {
+                    return next(err);
+                }
+                req.entityManager.save(user, (err) => {
+                    if (err)
+                        return next(err);
+                    res.sendResponse(user.id);
+                });
             });
-            //var userSaved = await userDao.getByEmail(req.body.email);
-            // var configSessionFactory = require('../../infra/config.session.factory');
-            // var session = configSessionFactory.session();
-            // var userSaved = await session.query(User).findOne({email: req.body.email}).asPromise();
-            // if(userSaved)
-            // {
-            //     resp.json({success: false, error: "User with same e-mail already exists"});
-            //     return;
-            // }    
-            // try{
-            //     var user = new User(null, req.body.name, req.body.email, req.body.birthday);
-            //     user.updatePassword(req.body.password);    
-            //     // session.save(user);
-            //     // session.close();
-            //     await userDao.save(user);
-            //     resp.json({success: true});
-            // }catch(error){
-            //     next(error);
-            //     //session.close(next(error))
-            // }
         });
     }
-    put(req, resp, next) {
+    put(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            var userDao = injector_1.default.getRegistered("userDao");
-            var sessionFactory = injector_1.default.getRegistered("sessionFactory");
-            var session = sessionFactory.createSession();
-            var userSaved = yield userDao.getByEmail(req.body.email);
-            //var userSaved = await session.query(User).findOne({email: req.body.email}).asPromise();
-            if (!userSaved)
-                resp.json({ success: false, error: "User was not found" });
-            else {
-                // userSaved.birthday = req.body.birthday;
-                // userSaved.email = req.body.email;
-                // userSaved.name = req.body.name;
-                // session.save(userSaved);
-                // session.close();
-                // resp.json({success: true});
-                var user = new User_1.User(null, req.body.name, req.body.email, req.body.birthday);
-                userDao.update(user).then(() => {
-                    resp.json({ success: true });
-                }, (error) => {
-                    resp.json({ success: false, error: error });
-                });
-            }
+            req.entityManager.query(user_1.User).findOne({ email: req.body.email }, (err, user) => {
+                if (err)
+                    return next(err);
+                if (!user) {
+                    next(new Error("User was not found"));
+                    return;
+                }
+                // todo: need to fix this to correctly parse date and take timezone into account OR store date as string
+                user.birthday = new Date(req.body.birthday);
+                user.email = req.body.email;
+                user.name = req.body.name;
+                user.updatePassword(req.body.password);
+                // you do not need to call session.save - dirty checking is automatic with the default change tracking
+                res.sendResponse(user.id);
+            });
         });
     }
 }

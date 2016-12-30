@@ -14,6 +14,7 @@ describe('Web Startup', () => {
     var errorsHandler = {
         generic: (err, req, res, next) => { }
     };
+    var sessionFactory = null;
     it('should create the app', () => {
         var app = {
             use: (param) => { },
@@ -21,7 +22,7 @@ describe('Web Startup', () => {
             get: (param) => { return ''; },
             engine: (param1, param2) => { }
         };
-        var startup = new startup_1.Startup(app, routerManager, errorsHandler);
+        var startup = new startup_1.Startup(app, routerManager, errorsHandler, sessionFactory);
         chai_1.assert.isDefined(startup.app);
     });
     it('shoud set the routers througt of the routers manager', () => {
@@ -32,7 +33,7 @@ describe('Web Startup', () => {
             get: (param) => { return ''; }
         };
         var useSpy = sinon.spy(app, 'use');
-        var startup = new startup_1.Startup(app, routerManager, errorsHandler);
+        var startup = new startup_1.Startup(app, routerManager, errorsHandler, sessionFactory);
         sinon.assert.calledWith(useSpy, '/', routerManager.router);
     });
     it('shoud set the middleware of erros generic', () => {
@@ -45,45 +46,38 @@ describe('Web Startup', () => {
             get: (param) => { return ''; }
         };
         var useSpy = sinon.spy(app, 'use');
-        var startup = new startup_1.Startup(app, routerManager, errorsHandler);
+        var startup = new startup_1.Startup(app, routerManager, errorsHandler, sessionFactory);
         sinon.assert.calledWithExactly(useSpy, funcExpected);
     });
-    it('should start the listen', () => {
+    it('should start the listener', (done) => {
         var app = {
             use: (param) => { },
             set: (param1, param2) => { },
             get: (param) => { return ''; },
             engine: (param1, param2) => { },
-            listen: (port, func) => { chai_1.assert.equal('3000', port); },
+            listen: (port, callback) => {
+                chai_1.assert.equal('3000', port);
+                process.nextTick(callback);
+            },
             on: (type, func) => { }
         };
-        var startup = new startup_1.Startup(app, routerManager, errorsHandler);
-        startup.listen();
+        var startup = new startup_1.Startup(app, routerManager, errorsHandler, sessionFactory);
+        startup.listen("3000", done);
     });
-    it('should return a server', () => {
+    it('should have a option to select the port of the app', (done) => {
         var app = {
             use: (param) => { },
             set: (param1, param2) => { },
             get: (param) => { return ''; },
             engine: (param1, param2) => { },
-            listen: (port, func) => { return {}; },
+            listen: (port, callback) => {
+                chai_1.assert.equal('4000', port);
+                process.nextTick(callback);
+            },
             on: (type, func) => { }
         };
-        var startup = new startup_1.Startup(app, routerManager, errorsHandler);
-        var server = startup.listen();
-        chai_1.assert.isNotNull(server);
-    });
-    it('should haver a option to select the port of the app', () => {
-        var app = {
-            use: (param) => { },
-            set: (param1, param2) => { },
-            get: (param) => { return ''; },
-            engine: (param1, param2) => { },
-            listen: (port, func) => { chai_1.assert.equal('4000', port); },
-            on: (type, func) => { }
-        };
-        var startup = new startup_1.Startup(app, routerManager, errorsHandler);
-        startup.listen('4000');
+        var startup = new startup_1.Startup(app, routerManager, errorsHandler, sessionFactory);
+        startup.listen('4000', done);
     });
 });
 //# sourceMappingURL=startup.test.js.map

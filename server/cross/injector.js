@@ -16,6 +16,9 @@ class Injector {
         }
         Injector.registry[key] = value;
     }
+    static clear() {
+        Injector.registry = {};
+    }
 }
 Injector.registry = {};
 Object.defineProperty(exports, "__esModule", { value: true });
