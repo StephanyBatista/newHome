@@ -35,6 +35,9 @@ export class User {
 
     updatePassword(password: string): void {
 
+        DomainException.when(password == null || password == '', "Password is required");
+        DomainException.when(password.length < 3, "Password must have in the minimum 3 characters");
+        
         this._password = password;
     }
 

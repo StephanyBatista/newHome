@@ -1,10 +1,10 @@
 import {assert} from 'chai';
-import {Application, Router} from 'express';
 import * as sinon from 'sinon';
-import {User} from "../../../server/model/user";
-import {init} from "../../../server";
-import {Startup} from "../../../server/web/startup";
 import {Session} from "hydrate-mongodb";
+import {Application, Router} from 'express';
+import {init} from "../../../server";
+import {User} from "../../../server/model/user";
+import {Startup} from "../../../server/web/startup";
 
 describe('API User', () => {
 
@@ -137,6 +137,26 @@ describe('API User', () => {
 
                 var bodyJson = JSON.parse(body);
                 assert.isTrue(bodyJson.success, bodyJson.error);
+                done();
+        });
+    });
+
+    it('should not return success when password does not have in the minumum 3 characters', (done) => {
+
+        request.post(
+            {
+                url: baseUrl + '/api/v1/user',
+                form:{
+                    name: 'alfred',
+                    email: emailDefault,
+                    birthday: '1985/11/25',
+                    password: '12'
+                }
+            },
+            (error, resp, body) => {
+
+                var bodyJson = JSON.parse(body);
+                assert.isFalse(bodyJson.success, bodyJson.error);
                 done();
         });
     });

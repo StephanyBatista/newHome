@@ -26,5 +26,14 @@ describe('Domain User', () => {
         user.updatePassword(password);
         chai_1.assert.equal(user.password, password);
     });
+    it('should not set the password in empty or null', () => {
+        var user = new user_1.User(name, email, birthday);
+        chai_1.assert.throws(() => { user.updatePassword(''); }, "Password is required");
+        chai_1.assert.throws(() => { user.updatePassword(null); }, "Password is required");
+    });
+    it('should validate the password to have minimum 3 characters', () => {
+        var user = new user_1.User(name, email, birthday);
+        chai_1.assert.throws(() => { user.updatePassword('12'); }, "Password must have in the minimum 3 characters");
+    });
 });
 //# sourceMappingURL=user.test.js.map

@@ -10,7 +10,7 @@ class RouterManager {
             successRedirect: '/admin/',
             failureRedirect: '/login',
         }));
-        // protected resources
+        //protected resources
         this.router.all("*", (req, res, next) => {
             if (req.isAuthenticated()) {
                 next();

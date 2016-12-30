@@ -23,6 +23,8 @@ let User = class User {
         return this._password;
     }
     updatePassword(password) {
+        domain_exception_1.DomainException.when(password == null || password == '', "Password is required");
+        domain_exception_1.DomainException.when(password.length < 3, "Password must have in the minimum 3 characters");
         this._password = password;
     }
     verifyPassword(password) {

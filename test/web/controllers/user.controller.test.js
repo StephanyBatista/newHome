@@ -1,7 +1,7 @@
 "use strict";
 const chai_1 = require("chai");
-const user_1 = require("../../../server/model/user");
 const server_1 = require("../../../server");
+const user_1 = require("../../../server/model/user");
 describe('API User', () => {
     // create a request object with cookied enabled
     var request = require('request').defaults({ jar: true });
@@ -101,6 +101,21 @@ describe('API User', () => {
         }, (error, resp, body) => {
             var bodyJson = JSON.parse(body);
             chai_1.assert.isTrue(bodyJson.success, bodyJson.error);
+            done();
+        });
+    });
+    it('should not return success when password does not have in the minumum 3 characters', (done) => {
+        request.post({
+            url: baseUrl + '/api/v1/user',
+            form: {
+                name: 'alfred',
+                email: emailDefault,
+                birthday: '1985/11/25',
+                password: '12'
+            }
+        }, (error, resp, body) => {
+            var bodyJson = JSON.parse(body);
+            chai_1.assert.isFalse(bodyJson.success, bodyJson.error);
             done();
         });
     });

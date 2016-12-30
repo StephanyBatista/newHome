@@ -52,7 +52,6 @@ class UserController {
                 user.birthday = new Date(req.body.birthday);
                 user.email = req.body.email;
                 user.name = req.body.name;
-                user.updatePassword(req.body.password);
                 // you do not need to call session.save - dirty checking is automatic with the default change tracking
                 res.sendResponse(user.id);
             });
