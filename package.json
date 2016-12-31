@@ -4,7 +4,7 @@
   "description": "new home to company",
   "main": "bootstrap.js",
   "scripts": {
-    "test": "mocha test --debug-brk --recursive"
+    "test": "mocha test --recursive"
   },
   "author": "salmeidabatista@gmail.com",
   "license": "ISC",
