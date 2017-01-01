@@ -7,8 +7,7 @@
         "sourceMap": true,
         "experimentalDecorators": true,
         "lib": ["es6", "dom"],
-        "emitDecoratorMetadata": true,
-        "outDir": "build"
+        "emitDecoratorMetadata": true
     },
     "exclude": [
         "node_modules"

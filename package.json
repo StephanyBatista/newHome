@@ -4,7 +4,9 @@
   "description": "new home to company",
   "main": "bootstrap.js",
   "scripts": {
-    "test": "mocha test --recursive"
+    "test": "npm build && mocha test --recursive",
+    "gulp": "gulp",
+    "build": "tsc"
   },
   "author": "salmeidabatista@gmail.com",
   "license": "ISC",
@@ -41,11 +43,13 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
+    "pug": "^2.0.0-beta6",
     "reflect-metadata": "^0.1.9",
     "serve-favicon": "^2.3.2",
     "source-map-support": "^0.4.8",
     "swig": "^1.4.2",
     "tslint": "^4.0.2",
+    "typescript": "^2.1.4",
     "typings": "^2.0.0"
   }
 }
