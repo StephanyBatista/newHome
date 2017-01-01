@@ -31,8 +31,8 @@ export class Startup {
 
         this.sessionFactory = sessionFactory;
         this._app = app;
-        this._app.engine('html', consolidate.swig);
-        this._app.set('view engine', 'html');
+        this._app.engine('pug', consolidate.pug);
+        this._app.set('view engine', 'pug');
         this._app.set('views', __dirname + '/views');
 
         // create an entity manager for each web request
