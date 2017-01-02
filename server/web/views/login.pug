@@ -13,6 +13,7 @@ html.login-bg
     link(rel='stylesheet', type='text/css', href='/css/icons.css')
     // libraries
     link(rel='stylesheet', type='text/css', href='/lib/components-font-awesome/css/font-awesome.min.css')
+    link(rel='stylesheet', type='text/css', href='//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css')
     // this page specific styles
     link(rel='stylesheet', href='/css/signin.css', type='text/css', media='screen')
     // open sans font
@@ -40,10 +41,12 @@ html.login-bg
         a(href='signup.html') Sign up
     // scripts
     script(src='http://code.jquery.com/jquery-latest.js')
+    script(src='//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js')
     script(src='/lib/bootstrap/dist/js/bootstrap.min.js')
     script(src='/js/theme.js')
-    script.
-        var errors = JSON.stringify('#{errors[0]}')
-        console.log(errors[0])
-        
-            
+    script(type='text/javascript').
+        if('#{errors}' != ''){
+            var errors = '#{errors}'.split(',');
+            for(var i = 0; i < errors.length; i++)
+                toastr.warning(errors[i]);
+        }

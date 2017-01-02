@@ -6,6 +6,7 @@
   "scripts": {
     "test": "npm build && mocha test --recursive",
     "gulp": "gulp",
+    "bower": "bower",
     "build": "tsc"
   },
   "author": "salmeidabatista@gmail.com",

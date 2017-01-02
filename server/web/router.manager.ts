@@ -16,7 +16,7 @@ export class RouterManager{
         this.router = router;
 
         router.get('/login', (req, res, next) => {
-            res.render('login', {errors: ["alert 1", "alert 2"]});
+            res.render('login');
         });
 
         router.post('/login', passport.authenticate('local', {
