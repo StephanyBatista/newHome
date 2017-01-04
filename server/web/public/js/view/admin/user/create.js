@@ -8,7 +8,7 @@ $(function() {
 
 function submit(){
 
-    postForm('form', '/api/v1/user', successPost, failPost)
+    postForm('form', '/api/v1/user', successPost)
 }
 
 function successPost(){
@@ -16,13 +16,9 @@ function successPost(){
     window.location = '/admin/user/list';
 }
 
-function failPost(){
-    
-}
-
 $( document ).ajaxError(function(event, request, settings) {
   
   if(request.status == 500 && request.responseJSON && request.responseJSON.error)
-    toastr.error(request.responseJson.error);
+    toastr.error(request.responseJSON.error);
 });
 
