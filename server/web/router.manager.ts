@@ -24,6 +24,8 @@ export class RouterManager{
             failureRedirect : '/login',
         }));
 
+        this.router.get('/admin/user/create', adminController.newUser);
+
         //protected resources
         this.router.all("*", (req, res, next) => {
 

@@ -10,6 +10,7 @@ class RouterManager {
             successRedirect: '/admin/',
             failureRedirect: '/login',
         }));
+        this.router.get('/admin/user/create', adminController.newUser);
         //protected resources
         this.router.all("*", (req, res, next) => {
             if (req.isAuthenticated()) {
