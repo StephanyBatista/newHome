@@ -4,4 +4,3 @@ class UserController {
     }
 }
 exports.UserController = UserController;
-//# sourceMappingURL=home.controller.js.map

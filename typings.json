@@ -2,5 +2,8 @@
   "dependencies": {
     "express": "registry:npm/express#4.14.0+20160925001530",
     "request": "registry:npm/request#2.69.0+20160428223725"
+  },
+  "globalDependencies": {
+    "jquery": "registry:dt/jquery#1.10.0+20170101013624"
   }
 }

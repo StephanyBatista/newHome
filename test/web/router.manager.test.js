@@ -36,4 +36,3 @@ describe('Routes', () => {
         sinon.assert.calledWith(putSpy, '/api/v1/user');
     });
 });
-//# sourceMappingURL=router.manager.test.js.map

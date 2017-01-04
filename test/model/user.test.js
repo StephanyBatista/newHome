@@ -36,4 +36,3 @@ describe('Domain User', () => {
         chai_1.assert.throws(() => { user.updatePassword('12'); }, "Password must have in the minimum 3 characters");
     });
 });
-//# sourceMappingURL=user.test.js.map

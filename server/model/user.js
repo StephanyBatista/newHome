@@ -53,4 +53,3 @@ User = __decorate([
     __metadata("design:paramtypes", [String, String, Date])
 ], User);
 exports.User = User;
-//# sourceMappingURL=user.js.map

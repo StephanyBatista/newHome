@@ -1,37 +1,32 @@
 extends ../layout.pug
 
 block content
-#pad-wrapper.new-user
-.row.header
-    .col-md-12
-    h3 Create a new user
-.row.form-wrapper
-    .col-md-9.with-sidebar
-    form.form-horizontal(role='form')
-        .form-group
-        label.col-md-2.control-label(for='inputName1') Name
-        .col-md-8
-            input#inputName1.form-control(type='text', placeholder='Name')
-        .form-group
-        label.col-md-2.control-label(for='inputEmail1') Email
-        .col-md-8
-            input#inputEmail1.form-control(type='text', placeholder='Email')
-        .form-group
-        label.col-md-2.control-label(for='inputPhone1') Phone
-        .col-md-8
-            input#inputPhone1.form-control(type='text', placeholder='Phone')
-        .form-group
-        label.col-md-2.control-label(for='inputWebsite1') Website
-        .col-md-8
-            input#inputWebsite1.form-control(type='text', placeholder='Website')
-        .form-group
-        label.col-md-2.control-label(for='inputAddress1') Address
-        .col-md-8
-            input#inputAddress1.form-control(type='text', placeholder='Address')
-        .form-group
-        label.col-md-2.control-label(for='inputContent1') Content
-        .col-md-8
-            textarea#inputContent1.form-control(placeholder='Content', rows='5')
-        .form-group
-        .col-md-offset-2.col-md-8
-            button.btn.btn-default(type='submit') Sign in
+    #pad-wrapper.new-user
+        .row.header
+            .col-md-12
+            h3 Cadastro de usuário
+        .row.form-wrapper
+            .col-md-9.with-sidebar
+            form#form.form-horizontal(role='form')
+                .form-group
+                label.col-md-2.control-label(for='name') Nome
+                .col-md-8
+                    input#name.form-control(type='text', placeholder='Nome', name='name')
+                .form-group
+                label.col-md-2.control-label(for='email') E-mail
+                .col-md-8
+                    input#email.form-control(type='text', placeholder='E-mail', name='email')
+                .form-group
+                label.col-md-2.control-label(for='birthday') Data de Nascimento
+                .col-md-8
+                    input#birthday.form-control(type='text', placeholder='Data de Nascimento', name='birthday')
+                .form-group
+                label.col-md-2.control-label(for='password') Senha
+                .col-md-8
+                    input#password.form-control(type='password', placeholder='Senha', name='password')
+                .form-group
+                .col-md-offset-2.col-md-8
+                    button#saveForm.btn.btn-default Salvar
+block script
+    script(src='/js/view/http.js')
+    script(src='/js/view/admin/user/create.js')

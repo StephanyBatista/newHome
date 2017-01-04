@@ -9,6 +9,6 @@ export class ErrorsHandler{
             res.render(view, {errors: err.message});
         }    
         else
-            res.status(500).json({success: false, error: err.message});
+            res.status(500).json({error: err.message});
     }
 }

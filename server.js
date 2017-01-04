@@ -38,4 +38,3 @@ function init(port, callback) {
     });
 }
 exports.init = init;
-//# sourceMappingURL=server.js.map

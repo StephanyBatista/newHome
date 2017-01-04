@@ -59,4 +59,3 @@ describe('Authenticate', () => {
         });
     });
 });
-//# sourceMappingURL=authenticate.test.js.map

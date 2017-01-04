@@ -8,4 +8,3 @@ class AdminController {
     }
 }
 exports.AdminController = AdminController;
-//# sourceMappingURL=admin.controller.js.map

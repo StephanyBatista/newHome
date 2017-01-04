@@ -23,4 +23,3 @@ class Injector {
 Injector.registry = {};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Injector;
-//# sourceMappingURL=injector.js.map

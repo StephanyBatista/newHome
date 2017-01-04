@@ -26,4 +26,3 @@ class Authenticate {
     }
 }
 exports.Authenticate = Authenticate;
-//# sourceMappingURL=authenticate.js.map
