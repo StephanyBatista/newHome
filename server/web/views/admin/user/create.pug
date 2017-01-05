@@ -26,7 +26,7 @@ block content
                     input#password.form-control(type='password', placeholder='Senha', name='password')
                 .form-group
                 .col-md-offset-2.col-md-8
-                    button#saveForm.btn.btn-default Salvar
+                    button#saveForm.btn.btn-default(click="postForm('form', '/api/v1/user', '/admin/user/list'); return false") Salvar
 block script
     script(src='/js/view/http.js')
     script(src='/js/view/admin/user/create.js')

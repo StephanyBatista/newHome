@@ -1,10 +1,15 @@
-function postForm(formName, api, callbackSucess, calbackFail){
+function postForm(formName, api, successCallbackOrUrl){
 
     var data = $('#' + formName).serialize();
 
     $.post(api, data)
             .success((result) => {
-                if(callbackSucess)
-                    callbackSucess();
+                if(successCallbackOrUrl)
+                {
+                    if(successCallbackOrUrl instanceof String)
+                        window.location = successCallbackOrUrl;
+                    else
+                        successCallbackOrUrl();
+                }    
             });
 }
