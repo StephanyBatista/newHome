@@ -13,7 +13,7 @@ source_map_support_1.install();
 function init(port, callback) {
     var config = new hydrate_mongodb_1.Configuration();
     // create indexes if not in production mode
-    config.createIndexes = process.env.NODE_ENV != "production";
+    config.createIndexes = process.env.NODE_ENV == "production";
     // add model mapping
     config.addMapping(new hydrate_mongodb_1.AnnotationMappingProvider(model));
     mongodb_1.MongoClient.connect('mongodb://localhost/mydatabase', (err, db) => {

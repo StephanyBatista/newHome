@@ -77,7 +77,7 @@ describe('API User', () => {
             done();
         });
     });
-    it('should not return success when save a user invalid', (done) => {
+    it('should not return success when trying to save a user invalid', (done) => {
         request.post({
             url: baseUrl + '/api/v1/user',
             form: {

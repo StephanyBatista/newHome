@@ -12,8 +12,6 @@ export class UserController{
         }    
 
         // todo: this is not an atomic operation. race condition exists.
-        var user = await req.entityManager.query(User).findOne({ email: req.body.email }).asPromise();
-
         req.entityManager.query(User).findOne({ email: req.body.email }, (err, user: User) => {
             if (err) return next(err);
 

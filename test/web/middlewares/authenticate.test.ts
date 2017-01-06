@@ -60,6 +60,8 @@ describe('Authenticate', () => {
             },
             (error, resp, body) => {
 
+                console.log(resp.headers['location']);
+                
                 assert.equal(resp.headers['location'], '/login');
                 done();
             });
