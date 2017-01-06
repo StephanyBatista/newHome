@@ -8,6 +8,7 @@ const authenticate_1 = require("./middlewares/authenticate");
 const favicon = require("serve-favicon");
 const cookieParser = require("cookie-parser");
 const consolidate = require("consolidate");
+const repository_1 = require("../../server/infra/repository");
 var passport = require('passport');
 class Startup {
     get app() {
@@ -23,6 +24,7 @@ class Startup {
         this._app.use((req, res, next) => {
             // add hydrate session to request object
             req.entityManager = sessionFactory.createSession();
+            req.repository = new repository_1.Repository(req.entityManager);
             // add to response object method for closing the hydrate session and sending a JSON response
             res.sendResponse = (value) => {
                 // close the hydrate session before sending the response to make sure everything flushed to the database ok

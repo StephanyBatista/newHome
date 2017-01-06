@@ -1,6 +1,6 @@
 import {Session, Constructor} from "hydrate-mongodb";
 
-export class Repository<T>{
+export class Repository{
 
     readonly session: Session;
     
