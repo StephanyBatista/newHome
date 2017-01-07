@@ -27,6 +27,8 @@ export class User {
         DomainException.when(name == null || name == '', "Name is required");
         DomainException.when(email == null || email == '', "E-mail is required");
         DomainException.when(birthday == null, "Birthday is required");
+        console.log(birthday.toString());
+        DomainException.when(birthday.toString() == "Invalid Date", "Birthday is not valid");
         
         this.name = name;
         this.email = email;

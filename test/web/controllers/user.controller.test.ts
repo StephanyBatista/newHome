@@ -120,7 +120,7 @@ describe('API User', () => {
                 done();
         });
     });
-    
+
     it('should return success when save the user', (done) => {
 
         request.post(
@@ -129,7 +129,7 @@ describe('API User', () => {
                 form:{
                     name: 'alfred',
                     email: emailDefault,
-                    birthday: '1985/11/25',
+                    birthday: '25/11/1985',
                     password: '123456'
                 }
             },
@@ -149,7 +149,7 @@ describe('API User', () => {
                 form:{
                     name: 'alfred',
                     email: emailDefault,
-                    birthday: '1985/11/25',
+                    birthday: '25/11/1985',
                     password: '12'
                 }
             },
@@ -169,7 +169,7 @@ describe('API User', () => {
                 form:{
                     name: 'alfred',
                     email: emailDefault,
-                    birthday: '1985/11/25',
+                    birthday: '25/11/1985',
                     password: '123456'
                 }
             },
@@ -189,7 +189,7 @@ describe('API User', () => {
                 form:{
                     name: 'batman',
                     email: emailDefault,
-                    birthday: '1990/01/01'
+                    birthday: '25/11/1985'
                 }
             },
             (error, resp, body) => {
@@ -208,7 +208,7 @@ describe('API User', () => {
                 form:{
                     name: 'batman',
                     email: 'aaa@aaa.com.py',
-                    birthday: '1990/01/01'
+                    birthday: '25/11/1985'
                 }
             }, 
             (error, resp, body) => {

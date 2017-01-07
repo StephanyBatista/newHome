@@ -3,7 +3,7 @@ const chai_1 = require("chai");
 const user_1 = require("../../server/model/user");
 var name = "user";
 var email = "user@gmail.com";
-var birthday = new Date('25/11/1985');
+var birthday = new Date('1985/11/25');
 describe('Domain User', () => {
     it('should be able create a user', () => {
         var user = new user_1.User(name, email, birthday);
@@ -19,6 +19,9 @@ describe('Domain User', () => {
     });
     it('should not create without birthday', () => {
         chai_1.assert.throws(() => { new user_1.User(name, email, null); }, "Birthday is required");
+    });
+    it('should not create with a birthday invalid', () => {
+        chai_1.assert.throws(() => { new user_1.User(name, email, new Date('25/11/1985')); }, "Birthday is not valid");
     });
     it('should set the password', () => {
         var user = new user_1.User(name, email, birthday);

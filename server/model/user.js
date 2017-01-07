@@ -15,6 +15,8 @@ let User = class User {
         domain_exception_1.DomainException.when(name == null || name == '', "Name is required");
         domain_exception_1.DomainException.when(email == null || email == '', "E-mail is required");
         domain_exception_1.DomainException.when(birthday == null, "Birthday is required");
+        console.log(birthday.toString());
+        domain_exception_1.DomainException.when(birthday.toString() == "Invalid Date", "Birthday is not valid");
         this.name = name;
         this.email = email;
         this.birthday = birthday;

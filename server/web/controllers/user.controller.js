@@ -21,7 +21,7 @@ class UserController {
                 return;
             }
             try {
-                user = new user_1.User(req.body.name, req.body.email, new Date(req.body.birthday));
+                user = new user_1.User(req.body.name, req.body.email, UserController.tranformToDate(req.body.birthday));
                 user.updatePassword(req.body.password);
                 yield req.repository.save(user_1.User, user);
                 res.sendResponse(user.id);
@@ -30,6 +30,10 @@ class UserController {
                 return next(err);
             }
         });
+    }
+    static tranformToDate(date) {
+        var moment = require('moment');
+        return moment(date, 'DD/MM/YYYY').toDate();
     }
     put(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {

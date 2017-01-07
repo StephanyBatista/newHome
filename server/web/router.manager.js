@@ -4,11 +4,14 @@ class RouterManager {
     constructor(router, adminController, userController) {
         this.router = router;
         router.get('/login', (req, res, next) => {
-            res.render('login');
+            if (req.query.fail)
+                res.render('login', { error: 'Usuário não encontrado' });
+            else
+                res.render('login');
         });
         router.post('/login', passport.authenticate('local', {
             successRedirect: '/admin/',
-            failureRedirect: '/login',
+            failureRedirect: '/login?fail=true'
         }));
         //protected resources
         this.router.all("*", (req, res, next) => {

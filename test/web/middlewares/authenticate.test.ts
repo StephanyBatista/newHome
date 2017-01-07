@@ -62,7 +62,7 @@ describe('Authenticate', () => {
 
                 console.log(resp.headers['location']);
                 
-                assert.equal(resp.headers['location'], '/login');
+                assert.equal(resp.headers['location'], '/login?fail=true');
                 done();
             });
     });

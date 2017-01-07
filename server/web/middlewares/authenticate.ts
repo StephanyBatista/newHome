@@ -27,7 +27,7 @@ export class Authenticate {
                     done(null, user);
                 }
                 else {
-                    done(err);
+                    done(null, false);
                 }
             });
         }));

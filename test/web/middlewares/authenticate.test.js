@@ -43,7 +43,7 @@ describe('Authenticate', () => {
             }
         }, (error, resp, body) => {
             console.log(resp.headers['location']);
-            chai_1.assert.equal(resp.headers['location'], '/login');
+            chai_1.assert.equal(resp.headers['location'], '/login?fail=true');
             done();
         });
     });

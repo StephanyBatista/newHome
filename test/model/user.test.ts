@@ -3,7 +3,7 @@ import {User} from '../../server/model/user';
 
 var name = "user";
 var email = "user@gmail.com";
-var birthday = new Date('25/11/1985');
+var birthday = new Date('1985/11/25');
 
 describe('Domain User', () => {
     it('should be able create a user', () => {
@@ -28,6 +28,11 @@ describe('Domain User', () => {
     it('should not create without birthday', () => {
         
         assert.throws(() => {new User(name, email, null)}, "Birthday is required");
+    });
+
+    it('should not create with a birthday invalid', () => {
+        
+        assert.throws(() => {new User(name, email, new Date('25/11/1985'))}, "Birthday is not valid");
     });
 
     it('should set the password', () => {
