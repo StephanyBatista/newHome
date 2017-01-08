@@ -372,7 +372,7 @@
 .ui-state-default,
 .ui-widget-content .ui-state-default,
 .ui-widget-header .ui-state-default {
-  background: url("../../img/jquery-ui/slider-handler.png") no-repeat;
+  background: url("/img/jquery-ui/slider-handler.png") no-repeat;
   border: none;
   width: 16px;
   height: 17px;
@@ -380,7 +380,7 @@
   outline: 0; }
 
 .ui-slider.vertical-handler .ui-state-default {
-  background: url("../../img/jquery-ui/slider-handler2.png") no-repeat;
+  background: url("/img/jquery-ui/slider-handler2.png") no-repeat;
   width: 11px;
   height: 21px;
   top: -8px; }

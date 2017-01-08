@@ -67,5 +67,31 @@ describe('Repository', () => {
 
         await repostory.save(User, user);
     });
+
+    it('Should list all entities', async ()=> {
+
+        var asPromise = () => {
+            return Promise.resolve([userFound]);
+        }
+        var findAll = (query) => {
+            return {
+                asPromise: asPromise
+            }
+        }
+        var query = (T) => {
+            return {
+                findAll: findAll
+            }
+        }
+        var session = {
+            query: query
+        }
+        
+        var repostory = new Repository(<Session>session);
+
+        var entities = await repostory.all(User);
+        assert.isDefined(entities);
+        assert.isArray(entities);
+    });
 });
 

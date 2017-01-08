@@ -1,0 +1,27 @@
+extends ../layout.pug
+
+block head
+    link(rel='stylesheet', type='text/css', href='/css/user-list.css', media='screen')
+block content
+    #pad-wrapper.users-list
+        .row.header
+            h3 Users
+        // Users table
+        .row
+            .col-md-12
+                table.table.table-hover
+                    tbody
+                        // row
+                        each entity in entities
+                            tr.first
+                                td
+                                    a.name(href='/admin/user/update/' + entity.email) #{entity.name}
+                                    .subtext
+                                    = entity.id 
+                                td
+                                    = entity.email
+                                td
+                                    = entity.birthdayFormatted()
+                        
+                        
+block script

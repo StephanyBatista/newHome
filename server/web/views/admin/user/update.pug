@@ -4,28 +4,24 @@ block content
     #pad-wrapper.new-user
         .row.header
             .col-md-12
-            h3 Cadastro de usuário
+            h3 Edição de usuário
         .row.form-wrapper
             .col-md-9.with-sidebar
             form#form.form-horizontal(role='form')
                 .form-group
                 label.col-md-2.control-label(for='name') Nome
                 .col-md-8
-                    input#name.form-control(type='text', placeholder='Nome', name='name')
+                    input#name.form-control(type='text', placeholder='Nome', name='name', value=entity.name)
                 .form-group
                 label.col-md-2.control-label(for='email') E-mail
                 .col-md-8
-                    input#email.form-control(type='text', placeholder='E-mail', name='email')
+                    input#name.form-control(type='text', placeholder='Nome', name='email', value=entity.email)
                 .form-group
                 label.col-md-2.control-label(for='birthday') Data de Nascimento
                 .col-md-8
-                    input#birthday.form-control(type='text', placeholder='Data de Nascimento', name='birthday')
-                .form-group
-                label.col-md-2.control-label(for='password') Senha
-                .col-md-8
-                    input#password.form-control(type='password', placeholder='Senha', name='password')
+                    input#birthday.form-control(type='text', placeholder='Data de Nascimento', name='birthday', value=entity.birthdayFormatted())
                 .form-group
                 .col-md-offset-2.col-md-8
-                    button#saveForm.btn.btn-default(onclick="requestAjax('POST','form', '/api/v1/user', '/admin/user/list'); return false") Salvar
+                    button#saveForm.btn.btn-default(onclick="requestAjax('PUT', 'form', '/api/v1/user', '/admin/user/list'); return false") Salvar
 block script
     script(src='/js/view/http.js')

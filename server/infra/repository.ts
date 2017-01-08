@@ -14,6 +14,11 @@ export class Repository{
         return await this.session.query(ctr).findOne(query).asPromise();
     }
 
+    public async all<T>(ctr: Constructor<T>){
+
+        return await this.session.query(ctr).findAll().asPromise();
+    }
+
     public async save<T>(ctr: Constructor<T>, entity: T){
 
         return new Promise((resolve, reject) => {

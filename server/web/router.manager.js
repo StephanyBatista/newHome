@@ -23,9 +23,11 @@ class RouterManager {
             }
         });
         this.router.get('/admin/user/create', adminController.newUser);
+        this.router.get('/admin/user/list', adminController.listUser);
+        this.router.get('/admin/user/update/:email', adminController.updateUser);
+        this.router.get('/admin/', adminController.get);
         this.router.post('/api/v1/user', userController.post);
         this.router.put('/api/v1/user', userController.put);
-        this.router.get('/admin/', adminController.get);
     }
 }
 exports.RouterManager = RouterManager;

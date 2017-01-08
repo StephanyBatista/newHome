@@ -15,7 +15,6 @@ let User = class User {
         domain_exception_1.DomainException.when(name == null || name == '', "Name is required");
         domain_exception_1.DomainException.when(email == null || email == '', "E-mail is required");
         domain_exception_1.DomainException.when(birthday == null, "Birthday is required");
-        console.log(birthday.toString());
         domain_exception_1.DomainException.when(birthday.toString() == "Invalid Date", "Birthday is not valid");
         this.name = name;
         this.email = email;
@@ -32,6 +31,10 @@ let User = class User {
     verifyPassword(password) {
         // todo: store password hashed. checkout them module 'bcrypt-nodejs'
         return this.password === password;
+    }
+    birthdayFormatted() {
+        // todo: fix the day
+        return this.birthday.getDay() + '/' + (this.birthday.getUTCMonth() + 1) + '/' + this.birthday.getFullYear();
     }
 };
 __decorate([

@@ -55,4 +55,26 @@ describe('Repository', () => {
         var user = new User(2, "user2@gmail.com");
         yield repostory.save(User, user);
     }));
+    it('Should list all entities', () => __awaiter(this, void 0, void 0, function* () {
+        var asPromise = () => {
+            return Promise.resolve([userFound]);
+        };
+        var findAll = (query) => {
+            return {
+                asPromise: asPromise
+            };
+        };
+        var query = (T) => {
+            return {
+                findAll: findAll
+            };
+        };
+        var session = {
+            query: query
+        };
+        var repostory = new repository_1.Repository(session);
+        var entities = yield repostory.all(User);
+        chai_1.assert.isDefined(entities);
+        chai_1.assert.isArray(entities);
+    }));
 });
