@@ -19,7 +19,7 @@ class Authenticate {
                     done(null, user);
                 }
                 else {
-                    done(new Error("Usuário não encontrado"), false);
+                    done(null, false);
                 }
             });
         }));

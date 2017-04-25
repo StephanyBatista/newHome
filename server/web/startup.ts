@@ -13,6 +13,7 @@ import consolidate = require('consolidate');
 import {Server} from "http";
 import {SessionFactory} from "hydrate-mongodb";
 import {ExpressRequest, ExpressResponse} from "./expressRequest";
+import {Repository} from '../../server/infra/repository';
 
 var passport = require('passport');
 
@@ -40,6 +41,7 @@ export class Startup {
 
             // add hydrate session to request object
             req.entityManager = sessionFactory.createSession();
+            req.repository = new Repository(req.entityManager);
 
             // add to response object method for closing the hydrate session and sending a JSON response
             res.sendResponse = (value?: any) => {

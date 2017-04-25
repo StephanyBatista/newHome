@@ -10,29 +10,71 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const chai_1 = require("chai");
 const repository_1 = require("../../server/infra/repository");
 describe('Repository', () => {
-    var session = {
-        query: (T) => {
-            return {
-                findOne: (query) => {
-                    return {
-                        asPromise: () => {
-                            return new Promise((resolve, reject) => { return new User(); });
-                        }
-                    };
-                }
-            };
+    class User {
+        constructor(id, email) {
+            this.id = id;
+            this.email = email;
         }
-    };
-    var repostory = new repository_1.Repository(session);
+    }
+    var userFound = new User(1, "user@gmail.com");
     it('Should create a repository', () => {
+        var session = {};
+        var repostory = new repository_1.Repository(session);
         chai_1.assert.isDefined(repostory.session);
     });
     it('Should find a entity', () => __awaiter(this, void 0, void 0, function* () {
-        var repostory = new repository_1.Repository(session);
-        var email = "email@email";
-        var user = yield repostory.get(User, { email: email });
+        var asPromise = () => {
+            return Promise.resolve(userFound);
+        };
+        var findOne = (query) => {
+            return {
+                asPromise: asPromise
+            };
+        };
+        var query = (T) => {
+            return {
+                findOne: findOne
+            };
+        };
+        var session = {
+            query: query
+        };
+        var repository = new repository_1.Repository(session);
+        var email = userFound.email;
+        var user = yield repository.get(User, { email: email });
         chai_1.assert.equal(email, user.email);
     }));
+    it('Should save a entity', (done) => __awaiter(this, void 0, void 0, function* () {
+        var save = (user) => {
+            done();
+        };
+        var session = {
+            save: save
+        };
+        var repostory = new repository_1.Repository(session);
+        var user = new User(2, "user2@gmail.com");
+        yield repostory.save(User, user);
+    }));
+    it('Should list all entities', () => __awaiter(this, void 0, void 0, function* () {
+        var asPromise = () => {
+            return Promise.resolve([userFound]);
+        };
+        var findAll = (query) => {
+            return {
+                asPromise: asPromise
+            };
+        };
+        var query = (T) => {
+            return {
+                findAll: findAll
+            };
+        };
+        var session = {
+            query: query
+        };
+        var repostory = new repository_1.Repository(session);
+        var entities = yield repostory.all(User);
+        chai_1.assert.isDefined(entities);
+        chai_1.assert.isArray(entities);
+    }));
 });
-class User {
-}

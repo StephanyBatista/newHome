@@ -16,5 +16,21 @@ class Repository {
             return yield this.session.query(ctr).findOne(query).asPromise();
         });
     }
+    all(ctr) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.session.query(ctr).findAll().asPromise();
+        });
+    }
+    save(ctr, entity) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => {
+                this.session.save(entity, (err) => {
+                    if (err)
+                        reject(err);
+                    resolve();
+                });
+            });
+        });
+    }
 }
 exports.Repository = Repository;

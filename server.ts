@@ -15,7 +15,7 @@ export function init(port: string, callback: (err?: Error, server?: Startup) => 
 
     var config = new Configuration();
     // create indexes if not in production mode
-    config.createIndexes = process.env.NODE_ENV != "production";
+    config.createIndexes = process.env.NODE_ENV == "production";
     // add model mapping
     config.addMapping(new AnnotationMappingProvider(model));
 

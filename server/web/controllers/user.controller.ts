@@ -5,55 +5,52 @@ export class UserController{
 
     public async post(req: ExpressRequest, res: ExpressResponse, next) {
         
-        if(!req.body.email)
-        {
+        if(!req.body.email){
+
             next(new Error("Email was not informed"));
             return;
         }    
 
-        // todo: this is not an atomic operation. race condition exists.
-        req.entityManager.query(User).findOne({ email: req.body.email }, (err, user: User) => {
-            if (err) return next(err);
+        var user = await req.repository.get(User, { email: req.body.email });
 
-            if (user) {
-                next(new Error("User with same e-mail already exists"));
-                return;
-            }
+        if (user) {
 
-            // todo: need to fix this to correctly parse date and take timezone into account OR store date as string
-            try {
-                user = new User(req.body.name, req.body.email, new Date(req.body.birthday));
-                user.updatePassword(req.body.password);
-            }
-            catch(err) {
-                return next(err);
-            }
+            next(new Error("User with same e-mail already exists"));
+            return;
+        }
 
-            req.entityManager.save(user, (err) => {
-                if (err) return next(err);
+        try {
+            
+            user = new User(req.body.name, req.body.email, UserController.tranformToDate(req.body.birthday));
+            user.updatePassword(req.body.password);
+            await req.repository.save(User, user);
+            res.sendResponse(user.id);
+        }
+        catch(err) {
 
-                res.sendResponse(user.id);
-            });
-        });
+            return next(err);
+        }
+    }
+
+    private static tranformToDate(date: string): Date{
+        
+        var moment = require('moment');
+        return moment(date, 'DD/MM/YYYY').toDate();
     }
 
     public async put(req: ExpressRequest, res: ExpressResponse, next) {
 
-        req.entityManager.query(User).findOne({ email: req.body.email }, (err, user: User) => {
-            if (err) return next(err);
+        var user = await req.repository.get(User, { email: req.body.email });
 
-            if (!user) {
-                next(new Error("User was not found"));
-                return;
-            }
+        if (!user) {
+            next(new Error("User was not found"));
+            return;
+        }
 
-            // todo: need to fix this to correctly parse date and take timezone into account OR store date as string
-            user.birthday = new Date(req.body.birthday);
-            user.email = req.body.email;
-            user.name = req.body.name;
+        user.birthday = new Date(req.body.birthday);
+        user.email = req.body.email;
+        user.name = req.body.name;
 
-            // you do not need to call session.save - dirty checking is automatic with the default change tracking
-            res.sendResponse(user.id);
-        });
+        res.sendResponse(user.id);
     }
 }

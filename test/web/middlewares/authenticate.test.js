@@ -42,7 +42,8 @@ describe('Authenticate', () => {
                 password: "teste123456"
             }
         }, (error, resp, body) => {
-            chai_1.assert.equal(resp.headers['location'], '/login');
+            console.log(resp.headers['location']);
+            chai_1.assert.equal(resp.headers['location'], '/login?fail=true');
             done();
         });
     });

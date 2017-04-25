@@ -15,46 +15,37 @@ class UserController {
                 next(new Error("Email was not informed"));
                 return;
             }
-            // todo: this is not an atomic operation. race condition exists.
-            req.entityManager.query(user_1.User).findOne({ email: req.body.email }, (err, user) => {
-                if (err)
-                    return next(err);
-                if (user) {
-                    next(new Error("User with same e-mail already exists"));
-                    return;
-                }
-                // todo: need to fix this to correctly parse date and take timezone into account OR store date as string
-                try {
-                    user = new user_1.User(req.body.name, req.body.email, new Date(req.body.birthday));
-                    user.updatePassword(req.body.password);
-                }
-                catch (err) {
-                    return next(err);
-                }
-                req.entityManager.save(user, (err) => {
-                    if (err)
-                        return next(err);
-                    res.sendResponse(user.id);
-                });
-            });
+            var user = yield req.repository.get(user_1.User, { email: req.body.email });
+            if (user) {
+                next(new Error("User with same e-mail already exists"));
+                return;
+            }
+            try {
+                user = new user_1.User(req.body.name, req.body.email, UserController.tranformToDate(req.body.birthday));
+                user.updatePassword(req.body.password);
+                yield req.repository.save(user_1.User, user);
+                res.sendResponse(user.id);
+            }
+            catch (err) {
+                return next(err);
+            }
         });
+    }
+    static tranformToDate(date) {
+        var moment = require('moment');
+        return moment(date, 'DD/MM/YYYY').toDate();
     }
     put(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            req.entityManager.query(user_1.User).findOne({ email: req.body.email }, (err, user) => {
-                if (err)
-                    return next(err);
-                if (!user) {
-                    next(new Error("User was not found"));
-                    return;
-                }
-                // todo: need to fix this to correctly parse date and take timezone into account OR store date as string
-                user.birthday = new Date(req.body.birthday);
-                user.email = req.body.email;
-                user.name = req.body.name;
-                // you do not need to call session.save - dirty checking is automatic with the default change tracking
-                res.sendResponse(user.id);
-            });
+            var user = yield req.repository.get(user_1.User, { email: req.body.email });
+            if (!user) {
+                next(new Error("User was not found"));
+                return;
+            }
+            user.birthday = new Date(req.body.birthday);
+            user.email = req.body.email;
+            user.name = req.body.name;
+            res.sendResponse(user.id);
         });
     }
 }

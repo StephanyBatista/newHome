@@ -27,13 +27,14 @@ export class User {
         DomainException.when(name == null || name == '', "Name is required");
         DomainException.when(email == null || email == '', "E-mail is required");
         DomainException.when(birthday == null, "Birthday is required");
+        DomainException.when(birthday.toString() == "Invalid Date", "Birthday is not valid");
         
         this.name = name;
         this.email = email;
         this.birthday = birthday;
     }
 
-    updatePassword(password: string): void {
+    public updatePassword(password: string): void {
 
         DomainException.when(password == null || password == '', "Password is required");
         DomainException.when(password.length < 3, "Password must have in the minimum 3 characters");
@@ -41,9 +42,15 @@ export class User {
         this._password = password;
     }
 
-    verifyPassword(password: string): boolean {
+    public verifyPassword(password: string): boolean {
 
         // todo: store password hashed. checkout them module 'bcrypt-nodejs'
         return this.password === password;
+    }
+
+    public birthdayFormatted(): string{
+        
+        // todo: fix the day
+        return this.birthday.getDay() + '/' + (this.birthday.getUTCMonth() + 1) + '/' + this.birthday.getFullYear();
     }
 }

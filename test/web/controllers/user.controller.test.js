@@ -77,7 +77,7 @@ describe('API User', () => {
             done();
         });
     });
-    it('should not return success when save a user invalid', (done) => {
+    it('should not return success when trying to save a user invalid', (done) => {
         request.post({
             url: baseUrl + '/api/v1/user',
             form: {
@@ -95,7 +95,7 @@ describe('API User', () => {
             form: {
                 name: 'alfred',
                 email: emailDefault,
-                birthday: '1985/11/25',
+                birthday: '25/11/1985',
                 password: '123456'
             }
         }, (error, resp, body) => {
@@ -110,7 +110,7 @@ describe('API User', () => {
             form: {
                 name: 'alfred',
                 email: emailDefault,
-                birthday: '1985/11/25',
+                birthday: '25/11/1985',
                 password: '12'
             }
         }, (error, resp, body) => {
@@ -125,7 +125,7 @@ describe('API User', () => {
             form: {
                 name: 'alfred',
                 email: emailDefault,
-                birthday: '1985/11/25',
+                birthday: '25/11/1985',
                 password: '123456'
             }
         }, (error, resp, body) => {
@@ -140,7 +140,7 @@ describe('API User', () => {
             form: {
                 name: 'batman',
                 email: emailDefault,
-                birthday: '1990/01/01'
+                birthday: '25/11/1985'
             }
         }, (error, resp, body) => {
             var bodyJson = JSON.parse(body);
@@ -154,7 +154,7 @@ describe('API User', () => {
             form: {
                 name: 'batman',
                 email: 'aaa@aaa.com.py',
-                birthday: '1990/01/01'
+                birthday: '25/11/1985'
             }
         }, (error, resp, body) => {
             var bodyJson = JSON.parse(body);
